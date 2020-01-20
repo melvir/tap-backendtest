@@ -35,7 +35,7 @@ public class EmployeeV1 {
     }
 
     @PutMapping(value = "/employees/{id}")
-    public ResponseEntity<?> updateEmployees(@RequestBody Employee employee, @PathVariable long id){
+    public ResponseEntity<?> updateEmployee(@RequestBody Employee employee, @PathVariable long id){
         Optional<Employee> employeeOptional = employeeService.getEmployee(id);
         log.info("Received request to update employee with id = " + id);
 
