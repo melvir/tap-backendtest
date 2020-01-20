@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Optional;
 
+
 @Log
 @RestController
 @CrossOrigin
@@ -26,12 +27,30 @@ public class EmployeeV1 {
                          @RequestParam(defaultValue =  "0") Integer pageNo,
                          @RequestParam(defaultValue =  "5") Integer pageSize,
                          @RequestParam(defaultValue =  "id") String sortBy) throws Exception {
+
         log.info("Received request for all employees from user id = ");
         List<Employee> employeeList = employeeService.findAll(pageNo, pageSize, sortBy);
 
         return new ResponseEntity<>(employeeList, HttpStatus.OK);
     }
 
+    @PutMapping(value = "/employees/{id}")
+    public ResponseEntity<?> updateEmployees(@RequestBody Employee employee, @PathVariable long id){
+        Optional<Employee> employeeOptional = employeeService.getEmployee(id);
+        log.info("Received request to update employee with id = " + id);
+
+        if (employeeOptional.isPresent()){
+            //Only able to update employee if the employee exist
+        	employeeService.updateEmployee(employee);
+            String msg = String.format("Employee with id = %d is updated", id);
+            log.info(msg);
+            return new ResponseEntity<>(employee, HttpStatus.OK);
+        }
+        else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+    
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<?> deleteRole(@PathVariable long id){
         Optional<Employee> employeeOptional = employeeService.getEmployee(id);
@@ -43,6 +62,7 @@ public class EmployeeV1 {
             String msg = String.format("Employee with id = %d is deleted", id);
             log.info(msg);
             return ResponseEntity.ok(msg);
+
         }
         else {
             return ResponseEntity.notFound().build();
@@ -70,4 +90,5 @@ public class EmployeeV1 {
 
         return ResponseEntity.ok(msg);
     }
+
 }

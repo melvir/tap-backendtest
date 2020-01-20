@@ -29,10 +29,15 @@ public class EmployeeService {
 
         return pagedResult.getContent();
     }
-
+    
     public Optional<Employee> getEmployee(long id) {
 
         return employeeRepository.findById(id);
+    }
+    
+    public void updateEmployee(Employee employee)
+    {
+    	employeeRepository.save(employee);
     }
 
     public void deleteEmployee(long id) {
