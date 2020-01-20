@@ -40,10 +40,10 @@ public class EmployeeV1 {
     @PutMapping(value = "/{id}")
     public ResponseEntity<?> updateEmployees(@RequestBody Employee employee, @PathVariable long id){
         Optional<Employee> employeeOptional = employeeService.getEmployee(id);
-        logger.info("Received request to delete employee with id = " + id);
+        logger.info("Received request to update employee with id = " + id);
 
         if (employeeOptional.isPresent()){
-            // if role is admin/staff, forbid from deleting
+            //Only able to update employee if the employee exist
         	employeeService.updateEmployee(employee);
             String msg = String.format("Employee with id = %d is updated", id);
             logger.info(msg);
