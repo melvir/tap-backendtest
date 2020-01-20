@@ -13,11 +13,9 @@ import java.util.List;
 import java.util.Optional;
 
 @Log
-@CrossOrigin
 @RestController
 @CrossOrigin
 @RequestMapping(value = "/api/v1/employee")
-
 public class EmployeeV1 {
 
     @Autowired
@@ -28,8 +26,7 @@ public class EmployeeV1 {
                          @RequestParam(defaultValue =  "0") Integer pageNo,
                          @RequestParam(defaultValue =  "5") Integer pageSize,
                          @RequestParam(defaultValue =  "id") String sortBy) throws Exception {
-        //String userId = jwtUtils.getUserId(request, PinkV1.class);
-        logger.info("Received request for all employees from user id = ");
+        log.info("Received request for all employees from user id = ");
         List<Employee> employeeList = employeeService.findAll(pageNo, pageSize, sortBy);
 
         return new ResponseEntity<>(employeeList, HttpStatus.OK);
@@ -52,7 +49,6 @@ public class EmployeeV1 {
         }
     }
 
-    //@RequestMapping(value = "/new", method = RequestMethod.POST)
     @PostMapping("/new")
     public ResponseEntity<String> createNewEmployee(HttpServletRequest request,@RequestBody Employee employee) throws Exception {
         //String userId = jwtUtils.getUserId(request, PinkV1.class);
@@ -61,5 +57,17 @@ public class EmployeeV1 {
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body("Successfully created new Employee : " + employee);
+    }
+
+    @RequestMapping(value = "/employee/{id}", method = RequestMethod.GET)
+    public ResponseEntity<String> retrieveEmployee(HttpServletRequest request,
+                         @RequestParam(defaultValue =  "id") long id) throws Exception {
+
+        log.info("Received request for user id = ");
+        Optional<Employee> employee = employeeService.getEmployee(id);
+
+        String msg = String.format("Employee with id = %d is returned", employee);
+
+        return ResponseEntity.ok(msg);
     }
 }
