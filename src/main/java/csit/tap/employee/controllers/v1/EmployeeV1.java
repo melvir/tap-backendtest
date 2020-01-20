@@ -1,4 +1,4 @@
-package csit.tap.employee.api.v1;
+package csit.tap.employee.controllers.v1;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -10,7 +10,7 @@ import csit.tap.employee.entities.Employee;
 import javax.servlet.http.HttpServletRequest;
 import csit.tap.employee.services.EmployeeService;
 import java.util.List;
-import java.util.Optional;
+
 import lombok.extern.java.Log;
 
 @Log
