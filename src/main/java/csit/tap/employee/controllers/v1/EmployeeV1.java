@@ -79,11 +79,10 @@ public class EmployeeV1 {
                 .body("Successfully created new Employee : " + employee);
     }
 
-    @RequestMapping(value = "/employee/{id}", method = RequestMethod.GET)
-    public ResponseEntity<String> retrieveEmployee(HttpServletRequest request,
-                         @RequestParam(defaultValue =  "id") long id) throws Exception {
+    @GetMapping(value = "/retrieve_employee/{id}")
+    public ResponseEntity<String> retrieveEmployee(@PathVariable long id) throws Exception {
 
-        log.info("Received request for user id = ");
+        log.info("Received request to retrieve employee with user id = ");
         Optional<Employee> employee = employeeService.getEmployee(id);
 
         String msg = String.format("Employee with id = %d is returned", employee);
