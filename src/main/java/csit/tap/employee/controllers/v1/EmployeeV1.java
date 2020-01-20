@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Log
+@CrossOrigin
 @RestController
 @CrossOrigin
 @RequestMapping(value = "/api/v1/employee")
@@ -51,5 +52,14 @@ public class EmployeeV1 {
         }
     }
 
+    //@RequestMapping(value = "/new", method = RequestMethod.POST)
+    @PostMapping("/new")
+    public ResponseEntity<String> createNewEmployee(HttpServletRequest request,@RequestBody Employee employee) throws Exception {
+        //String userId = jwtUtils.getUserId(request, PinkV1.class);
+        log.info("Received request to create new employee from user id = ");
+        employeeService.save(employee);
 
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body("Successfully created new Employee : " + employee);
+    }
 }

@@ -37,4 +37,16 @@ public class EmployeeService {
     public void deleteEmployee(long id) {
         employeeRepository.deleteById(id);
     }
+
+    //Creates a new Entity
+    public void save(Employee employee) {
+
+        Employee newEmployee = new Employee();
+        newEmployee.setName(employee.getName());
+        newEmployee.setDepartment(employee.getDepartment());
+        newEmployee.setCreatedDateTime(LocalDateTime.now());
+        log.info("Saving Employee to store: name = " + employee.getName());
+        employeeRepository.save(newEmployee);
+    }
+
 }
