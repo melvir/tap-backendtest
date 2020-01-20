@@ -1,4 +1,4 @@
-package sg.gov.csit.entity.config;
+package csit.tap.employee.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
