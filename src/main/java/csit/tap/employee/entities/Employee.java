@@ -1,6 +1,8 @@
 package csit.tap.employee.entities;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -8,6 +10,8 @@ import java.time.LocalDateTime;
 @javax.persistence.Entity
 @Table(name = "Employee")
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Employee {
 
 	@Id
@@ -27,4 +31,9 @@ public class Employee {
 	@Column(name = "ModifiedDateTime", columnDefinition = "datetime")
 	private LocalDateTime modifiedDateTime;
 
+	public Employee(Long id, String name, String department) {
+		this.id = id;
+		this.name = name;
+		this.department = department;
+	}
 }
