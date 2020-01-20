@@ -1,11 +1,9 @@
 package csit.tap.employee.entities;
 
-import java.util.Date;
+import lombok.Data;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
-
-import lombok.Data;
-import lombok.extern.java.Log;
 
 @javax.persistence.Entity
 @Table(name = "Employee")

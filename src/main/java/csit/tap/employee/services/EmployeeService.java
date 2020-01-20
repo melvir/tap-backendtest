@@ -32,4 +32,15 @@ public class EmployeeService {
         return pagedResult.getContent();
     }
 
+    //Creates a new Entity
+    public void save(Employee employee) {
+
+        Employee newEmployee = new Employee();
+        newEmployee.setName(employee.getName());
+        newEmployee.setDepartment(employee.getDepartment());
+        newEmployee.setCreatedDateTime(LocalDateTime.now());
+        log.info("Saving Employee to store: name = " + employee.getName());
+        employeeRepository.save(newEmployee);
+    }
+
 }

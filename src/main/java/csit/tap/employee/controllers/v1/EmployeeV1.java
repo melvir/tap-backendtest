@@ -14,6 +14,7 @@ import java.util.List;
 import lombok.extern.java.Log;
 
 @Log
+@CrossOrigin
 @RestController
 @RequestMapping(value = "/api/v1/employee")
 public class EmployeeV1 {
@@ -34,5 +35,16 @@ public class EmployeeV1 {
         List<Employee> employeeList = employeeService.findAll(pageNo, pageSize, sortBy);
 
         return new ResponseEntity<>(employeeList, HttpStatus.OK);
+    }
+
+    //@RequestMapping(value = "/new", method = RequestMethod.POST)
+    @PostMapping("/new")
+    public ResponseEntity<String> createNewEmployee(HttpServletRequest request,@RequestBody Employee employee) throws Exception {
+        //String userId = jwtUtils.getUserId(request, PinkV1.class);
+        log.info("Received request to create new employee from user id = ");
+        employeeService.save(employee);
+
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body("Successfully created new Employee : " + employee);
     }
 }
