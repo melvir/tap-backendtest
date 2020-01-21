@@ -1,9 +1,5 @@
 # tap-backendtest
 
-## List of guides
-* Web Layer test : https://spring.io/guides/gs/testing-web/
-
-
 ## Objective
 * Make testing easy for developers to improve **code quality**
 * Adopt testing to systems which are deemed enterprise grade, not POCs
@@ -48,3 +44,6 @@
    * Low learning curve
 * Using Mockito
    * Power mockito
+
+## List of guides
+* Web Layer test : https://spring.io/guides/gs/testing-web/
