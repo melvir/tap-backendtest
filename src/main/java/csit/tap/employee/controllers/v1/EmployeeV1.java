@@ -73,17 +73,17 @@ public class EmployeeV1 {
     public ResponseEntity<String> createNewEmployee(HttpServletRequest request,@RequestBody Employee employee) throws Exception {
         //String userId = jwtUtils.getUserId(request, PinkV1.class);
         log.info("Received request to create new employee from user id = ");
-        employeeService.save(employee);
+        Employee newEmployee = employeeService.createEmployee(employee);
 
+        System.out.println("Employee to be returned is " + newEmployee);
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body("Successfully created new Employee : " + employee);
+                .body("Successfully created new Employee : " + newEmployee);
     }
 
-    @RequestMapping(value = "/employee/{id}", method = RequestMethod.GET)
-    public ResponseEntity<String> retrieveEmployee(HttpServletRequest request,
-                         @RequestParam(defaultValue =  "id") long id) throws Exception {
+    @GetMapping(value = "/retrieve_employee/{id}")
+    public ResponseEntity<String> retrieveEmployee(@PathVariable long id) throws Exception {
 
-        log.info("Received request for user id = ");
+        log.info("Received request to retrieve employee with user id = ");
         Optional<Employee> employee = employeeService.getEmployee(id);
 
         String msg = String.format("Employee with id = %d is returned", employee);

@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
@@ -26,19 +27,19 @@ public class TestEmployeeRestController {
     private EmployeeService employeeService;
 
     @Test
-    public void getAllEmployees() throws Exception
+    public void it_should_return_all_employees() throws Exception
     {
 
         mvc.perform( MockMvcRequestBuilders
                 .get("/api/v1/employee/all")
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("Origin","*"))
-                .andExpect(status().is2xxSuccessful());
-        //.andExpect(MockMvcResultMatchers.jsonPath("$.employeeId").exists());
+                .andExpect(status().isOk());
+                //.andExpect(MockMvcResultMatchers.jsonPath("$.id").exists());
     }
 
     @Test
-    public void createNewEmployee() throws Exception
+    public void it_should_return_created_employee() throws Exception
     {
 
         mvc.perform( MockMvcRequestBuilders
@@ -48,13 +49,11 @@ public class TestEmployeeRestController {
                 .accept(MediaType.APPLICATION_JSON)
                 .header("Origin","*"))
                 .andExpect(status().isCreated());
-                //.andExpect(MockMvcResultMatchers.jsonPath("$.employeeId").exists());
+                //.andExpect(MockMvcResultMatchers.jsonPath("$[0].name").value("Mary"));
     }
 
     public static String asJsonString(final Object obj) {
         try {
-            ObjectMapper mapper = new ObjectMapper();
-            System.out.println(mapper.writeValueAsString(obj));
             return new ObjectMapper().writeValueAsString(obj);
         } catch (Exception e) {
             throw new RuntimeException(e);

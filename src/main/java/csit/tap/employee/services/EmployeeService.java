@@ -23,6 +23,10 @@ public class EmployeeService {
     @Autowired
     private EmployeeRepository employeeRepository;
 
+    public EmployeeService(EmployeeRepository employeeRepository) {
+        this.employeeRepository = employeeRepository;
+    }
+
     //Retrieves all Entities
     public List<Employee> findAll(Integer pageNo, Integer pageSize, String sortBy) {
 
@@ -42,15 +46,16 @@ public class EmployeeService {
     }
 
     //Creates a new Entity
-    public Employee save(Employee employee) {
+    public Employee createEmployee(Employee employee) {
 
         Employee newEmployee = new Employee();
         newEmployee.setName(employee.getName());
         newEmployee.setDepartment(employee.getDepartment());
-        newEmployee.setCreatedDateTime(LocalDateTime.now());
-        System.out.println("name : " + newEmployee.getName());
+        newEmployee.setCreatedDateTime(employee.getCreatedDateTime());
         log.info("Saving Employee to store: name = " + employee.getName());
-        return employeeRepository.save(newEmployee);       
+        employeeRepository.save(newEmployee);
+
+        return newEmployee;
     }
     
     //Update an employee
