@@ -1,13 +1,38 @@
-# tap-backendtest
-
-## List of guides
-* Web Layer test : https://spring.io/guides/gs/testing-web/
-
+# TAP-Guide to Backend Test
 
 ## Objective
 * Make testing easy for developers to improve **code quality**
 * Adopt testing to systems which are deemed enterprise grade, not POCs
 
+## Test Layers
+The example applicationn shows different test layers according to the [Test Pyramid](https://martinfowler.com/bliki/TestPyramid.html).
+
+```
+      ╱╲
+  End-to-End
+    ╱────╲
+   ╱ Inte-╲
+  ╱ gration╲
+ ╱──────────╲
+╱   Unit     ╲
+──────────────
+```
+
+## Application Architecture
+```
+ ╭┄┄┄┄┄┄┄╮      ┌──────────┐      ┌──────────┐
+ ┆   ☁   ┆  ←→  │    ☕     │  ←→  │    💾     │
+ ┆  Web  ┆ HTTP │  Spring  │      │ Database │
+ ╰┄┄┄┄┄┄┄╯      │  Service │      └──────────┘
+                └──────────┘
+                     ↑ JSON/HTTP
+                     ↓
+                ┌──────────┐
+                │    ☁     │
+                │ Weather  │
+                │   API    │
+                └──────────┘
+```
 
 ## Concepts
 * Isolation : test only 1 layer each time and mock everything else
@@ -21,6 +46,9 @@
 
 
 ## What to test & why test / Minimal Code coverage
+* API
+  * Test other APIs that your app is consuming and asser the result to be the same
+
 * Controllers
   * Do integration testing from end to end up till persisting data into database. 
   * Do not only do unit testing of controller.
@@ -30,7 +58,7 @@
   * test business logic
   
 * Repostories
- * only applicable for custom query methods (e.g. jpa /jpl)
+  * only applicable for custom query methods (e.g. jpa /jpl)
  
 * Model
   * Do not test
@@ -41,7 +69,10 @@
 
 ## Mocking
 * Create your own java mock classes 
-  * Easy readabiliy
+   * Easy readabiliy
    * Low learning curve
 * Using Mockito
-  * Power mockito
+   * Power mockito
+
+## List of guides
+* Web Layer test : https://spring.io/guides/gs/testing-web/
