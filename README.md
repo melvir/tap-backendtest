@@ -6,6 +6,7 @@
 
 ## Objective
 * Make testing easy for developers to improve **code quality**
+* Adopt testing to systems which are deemed enterprise grade, not POCs
 
 
 ## Concepts
