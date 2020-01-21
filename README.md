@@ -1,9 +1,38 @@
-# tap-backendtest
+# TAP-Guide to Backend Test
 
 ## Objective
 * Make testing easy for developers to improve **code quality**
 * Adopt testing to systems which are deemed enterprise grade, not POCs
 
+## Test Layers
+The example applicationn shows different test layers according to the [Test Pyramid](https://martinfowler.com/bliki/TestPyramid.html).
+
+```
+      ╱╲
+  End-to-End
+    ╱────╲
+   ╱ Inte-╲
+  ╱ gration╲
+ ╱──────────╲
+╱   Unit     ╲
+──────────────
+```
+
+## Application Architecture
+```
+ ╭┄┄┄┄┄┄┄╮      ┌──────────┐      ┌──────────┐
+ ┆   ☁   ┆  ←→  │    ☕     │  ←→  │    💾     │
+ ┆  Web  ┆ HTTP │  Spring  │      │ Database │
+ ╰┄┄┄┄┄┄┄╯      │  Service │      └──────────┘
+                └──────────┘
+                     ↑ JSON/HTTP
+                     ↓
+                ┌──────────┐
+                │    ☁     │
+                │ Weather  │
+                │   API    │
+                └──────────┘
+```
 
 ## Concepts
 * Isolation : test only 1 layer each time and mock everything else
