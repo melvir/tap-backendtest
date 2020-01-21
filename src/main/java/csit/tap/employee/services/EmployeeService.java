@@ -54,7 +54,7 @@ public class EmployeeService {
         Employee newEmployee = new Employee();
         newEmployee.setName(employee.getName());
         newEmployee.setDepartment(employee.getDepartment());
-        newEmployee.setCreatedDateTime(LocalDateTime.now());
+        newEmployee.setCreatedDateTime(employee.getCreatedDateTime());
         log.info("Saving Employee to store: name = " + employee.getName());
         employeeRepository.save(newEmployee);
 
