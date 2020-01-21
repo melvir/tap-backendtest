@@ -26,12 +26,11 @@ public class EmployeeService {
     }
 
     //Retrieves all Entities
-    public List<Employee> findAll(Integer pageNo, Integer pageSize, String sortBy) {
+    public Page<Employee>findAll(Integer pageNo, Integer pageSize, String sortBy) {
 
         Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
-        Page<Employee> pagedResult = employeeRepository.findAll(paging);
 
-        return pagedResult.getContent();
+        return employeeRepository.findAll(paging);
     }
     
     public Optional<Employee> getEmployee(long id) {

@@ -4,6 +4,7 @@ import csit.tap.employee.entities.Employee;
 import csit.tap.employee.services.EmployeeService;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,20 +17,20 @@ import java.util.Optional;
 @Log
 @RestController
 @CrossOrigin
-@RequestMapping(value = "/api/v1/employee")
-public class EmployeeV1 {
+@RequestMapping(value = "/api/v1/employees")
+public class EmployeeController {
 
     @Autowired
     private EmployeeService employeeService;
 
-    @RequestMapping(value = "/all", method = RequestMethod.GET)
-    public ResponseEntity<List<Employee>> retrieveAllEmployees(HttpServletRequest request,
+    @GetMapping
+    public ResponseEntity<?> retrieveAllEmployees(HttpServletRequest request,
                          @RequestParam(defaultValue =  "0") Integer pageNo,
                          @RequestParam(defaultValue =  "5") Integer pageSize,
                          @RequestParam(defaultValue =  "id") String sortBy) throws Exception {
 
         log.info("Received request for all employees from user id = ");
-        List<Employee> employeeList = employeeService.findAll(pageNo, pageSize, sortBy);
+        Page<Employee> employeeList = employeeService.findAll(pageNo, pageSize, sortBy);
 
         return new ResponseEntity<>(employeeList, HttpStatus.OK);
     }

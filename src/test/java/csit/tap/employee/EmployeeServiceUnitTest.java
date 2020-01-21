@@ -47,7 +47,7 @@ public class EmployeeServiceUnitTest {
     public void when_find_all_it_should_return_all_employees() throws Exception
     {
 
-        List<Employee> employeeList = employeeService.findAll(0, 5, "id");
+        Page<Employee> employeeList = employeeService.findAll(0, 5, "id");
 
         assertThat(employeeList).isNotNull()
                 .isNotEmpty()
