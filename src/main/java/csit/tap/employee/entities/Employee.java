@@ -31,9 +31,14 @@ public class Employee {
 	@Column(name = "ModifiedDateTime", columnDefinition = "datetime")
 	private LocalDateTime modifiedDateTime;
 
-	public Employee(Long id, String name, String department) {
-		this.id = id;
+	public Employee(String name, String department) {
 		this.name = name;
 		this.department = department;
+	}
+
+	public Employee(String name, String department, LocalDateTime createdDateTime) {
+		this.name = name;
+		this.department = department;
+		this.createdDateTime = createdDateTime;
 	}
 }
