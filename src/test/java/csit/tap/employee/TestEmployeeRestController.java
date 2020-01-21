@@ -1,33 +1,27 @@
 package csit.tap.employee;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import csit.tap.employee.entities.Employee;
-import csit.tap.employee.repositories.CustomPageImpl;
 import csit.tap.employee.repositories.EmployeeRepository;
 import lombok.extern.java.Log;
-import org.aspectj.lang.annotation.Before;
 import org.junit.After;
-import org.junit.BeforeClass;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.data.domain.Page;
-import org.springframework.http.*;
-import org.springframework.test.context.junit4.SpringRunner;
 
-import javax.rmi.CORBA.ValueHandler;
+import java.util.ArrayList;
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static io.restassured.RestAssured.given;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @Log
-@RunWith(SpringRunner.class)
+@RunWith(JUnit4.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class TestEmployeeRestController {
 
@@ -40,36 +34,41 @@ public class TestEmployeeRestController {
     @Autowired
     private TestRestTemplate testRestTemplate;
 
-    //BeforeClass is used to execute before the test run.
-    @BeforeClass
-    public void setup() {
-        for (int i = 0; i < 10; i++) {
-            Employee employee = new Employee("alex" + i, "department " + i);
-            employeeRepository.save(employee);
-        }
+    @Autowired
+    ObjectMapper objectMapper;
+
+    @After
+    public void clearDatabase(){
+
     }
 
     @Test
     public void retrieveAllEmployee_shouldReturnAllEmployees() throws JsonProcessingException {
         //arrange
 
-//        setup();
+        List<Employee> employeeList = new ArrayList<>();
 
-        final String apiUrl = "http://localhost:" + port + "/api/v1/employees";
+//      setup();
+        for (int i = 0; i < 10; i++) {
+            Employee employee = new Employee("alex" + i, "department " + i);
+            employee = employeeRepository.save(employee);
+            employeeList.add(employee);
+        }
 
-        HttpEntity request = new HttpEntity(new HttpHeaders());
+        final String apiUrl = "http://localhost:" + port + "/api/v1/employees?pageNo=0&pageSize=10";
 
         //act
-        ResponseEntity<String> response = testRestTemplate.exchange(apiUrl, HttpMethod.GET, request, String.class);
-        ObjectMapper om = new ObjectMapper();
+        List<Employee> response =
+                given()
+                        .get(apiUrl)
+                        .then()
+                        .statusCode(200)
+                        .extract()
+                        .body()
+                        .jsonPath()
+                        .getList("content", Employee.class);
 
-        Page<Employee> employeeList = om.readValue(response.getBody(), new TypeReference<CustomPageImpl<Employee>>() {
-        });
-
-        log.info(response.getBody());
-
-        //assert
-        assertThat(response.getStatusCode()).isEqualByComparingTo(HttpStatus.OK);
+        assertEquals(response, employeeList);
     }
 
     @After
