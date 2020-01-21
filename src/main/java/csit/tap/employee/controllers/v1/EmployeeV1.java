@@ -88,7 +88,12 @@ public class EmployeeV1 {
 
         String msg = String.format("Employee with id = %d is returned", employee);
 
-        return ResponseEntity.ok(msg);
+        if (employee.isPresent()) {        	
+        	return ResponseEntity.ok(msg);
+        }
+        else {
+        	return ResponseEntity.noContent().build();
+        }
     }
 
 }
