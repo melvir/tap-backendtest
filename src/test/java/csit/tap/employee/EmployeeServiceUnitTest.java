@@ -4,11 +4,13 @@ import csit.tap.employee.entities.Employee;
 import csit.tap.employee.repositories.EmployeeRepository;
 import csit.tap.employee.services.EmployeeService;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -29,6 +31,13 @@ public class EmployeeServiceUnitTest {
     @InjectMocks
     private EmployeeService employeeService;
 
+    @Before
+    public void setup() {
+        Employee newEmployee = new Employee("Alex", "ITA");
+
+        //Mockito.doReturn(employeeRepository.findAll()).;
+    }
+
     @Test
     public void when_save_employee_it_should_return_employee() throws Exception
     {
@@ -47,7 +56,7 @@ public class EmployeeServiceUnitTest {
     public void when_find_all_it_should_return_all_employees() throws Exception
     {
 
-        List<Employee> employeeList = employeeService.findAll(0, 5, "id");
+        Page<Employee> employeeList = employeeService.findAll(0, 5, "id");
 
         assertThat(employeeList).isNotNull()
                 .isNotEmpty()
