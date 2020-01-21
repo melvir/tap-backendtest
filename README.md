@@ -21,6 +21,9 @@
 
 
 ## What to test & why test / Minimal Code coverage
+* API
+  * Test other APIs that your app is consuming and asser the result to be the same
+
 * Controllers
   * Do integration testing from end to end up till persisting data into database. 
   * Do not only do unit testing of controller.
