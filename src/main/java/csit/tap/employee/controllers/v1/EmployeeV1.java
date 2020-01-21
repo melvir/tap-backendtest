@@ -4,6 +4,7 @@ import csit.tap.employee.entities.Employee;
 import csit.tap.employee.services.EmployeeService;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,13 +24,13 @@ public class EmployeeV1 {
     private EmployeeService employeeService;
 
     @RequestMapping(value = "/all", method = RequestMethod.GET)
-    public ResponseEntity<List<Employee>> retrieveAllEmployees(HttpServletRequest request,
+    public ResponseEntity<Page<Employee>> retrieveAllEmployees(HttpServletRequest request,
                          @RequestParam(defaultValue =  "0") Integer pageNo,
                          @RequestParam(defaultValue =  "5") Integer pageSize,
                          @RequestParam(defaultValue =  "id") String sortBy) throws Exception {
 
         log.info("Received request for all employees from user id = ");
-        List<Employee> employeeList = employeeService.findAll(pageNo, pageSize, sortBy);
+        Page<Employee> employeeList = employeeService.findAll(pageNo, pageSize, sortBy);
 
         return new ResponseEntity<>(employeeList, HttpStatus.OK);
     }
@@ -88,7 +89,12 @@ public class EmployeeV1 {
 
         String msg = String.format("Employee with id = %d is returned", employee);
 
-        return ResponseEntity.ok(msg);
+        if (employee.isPresent()) {        	
+        	return ResponseEntity.ok(msg);
+        }
+        else {
+        	return ResponseEntity.noContent().build();
+        }
     }
 
 }

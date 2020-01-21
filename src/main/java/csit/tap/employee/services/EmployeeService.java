@@ -28,12 +28,12 @@ public class EmployeeService {
     }
 
     //Retrieves all Entities
-    public List<Employee> findAll(Integer pageNo, Integer pageSize, String sortBy) {
+    public Page<Employee> findAll(Integer pageNo, Integer pageSize, String sortBy) {
 
         Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
         Page<Employee> pagedResult = employeeRepository.findAll(paging);
 
-        return pagedResult.getContent();
+        return pagedResult;
     }
     
     public Optional<Employee> getEmployee(long id) {
@@ -53,6 +53,7 @@ public class EmployeeService {
         newEmployee.setDepartment(employee.getDepartment());
         newEmployee.setCreatedDateTime(employee.getCreatedDateTime());
         log.info("Saving Employee to store: name = " + employee.getName());
+        System.out.println(employeeRepository == null);
         employeeRepository.save(newEmployee);
 
         return newEmployee;

@@ -51,6 +51,15 @@ public class TestEmployeeRestController {
                 .andExpect(status().isCreated());
                 //.andExpect(MockMvcResultMatchers.jsonPath("$[0].name").value("Mary"));
     }
+    
+    @Test
+    public void getEmployee() throws Exception{     
+        mvc.perform( MockMvcRequestBuilders
+                .get("/api/v1/employee/retrieve_employee/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("Origin","*"))
+                .andExpect(status().isNoContent());
+    }
 
     public static String asJsonString(final Object obj) {
         try {
