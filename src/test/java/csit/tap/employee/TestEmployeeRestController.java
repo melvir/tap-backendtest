@@ -43,7 +43,7 @@ public class TestEmployeeRestController {
 
         mvc.perform( MockMvcRequestBuilders
                 .post("/api/v1/employee/new")
-                .content(asJsonString(new Employee((long)20, "Mary", "CST")))
+                .content(asJsonString(new Employee("Mary", "CST")))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .header("Origin","*"))
