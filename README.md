@@ -30,7 +30,7 @@
   * test business logic
   
 * Repostories
- * only applicable for custom query methods (e.g. jpa /jpl)
+  * only applicable for custom query methods (e.g. jpa /jpl)
  
 * Model
   * Do not test
@@ -41,7 +41,7 @@
 
 ## Mocking
 * Create your own java mock classes 
-  * Easy readabiliy
+   * Easy readabiliy
    * Low learning curve
 * Using Mockito
-  * Power mockito
+   * Power mockito
