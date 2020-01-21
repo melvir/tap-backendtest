@@ -2,10 +2,8 @@ package csit.tap.employee.repositories;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
+import com.fasterxml.jackson.databind.JsonNode;
+import org.springframework.data.domain.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -123,10 +121,8 @@ public class CustomPageImpl<T> extends PageImpl<T> {
         this.sort = sort;
     }
 
-    @JsonCreator
-    public Page<T> pageImpl() {
-
-        return new PageImpl<>(@JsonProperty("content") getContent(), new PageRequest(getNumber(),
-                getSize(), getSort()), getTotalElements());
-    }
+//    public Page<T> pageImpl() {
+//        return new PageImpl<>(getContent(), new PageRequest(getNumber(),
+//                getSize(), getSort()), getTotalElements());
+//    }
 }
