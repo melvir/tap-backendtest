@@ -1,28 +1,20 @@
 package csit.tap.employee;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import csit.tap.employee.entities.Employee;
-import csit.tap.employee.repositories.CustomPageImpl;
 import csit.tap.employee.repositories.EmployeeRepository;
 import lombok.extern.java.Log;
-import org.aspectj.lang.annotation.Before;
 import org.junit.After;
 import org.junit.BeforeClass;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.data.domain.Page;
 import org.springframework.http.*;
 import org.springframework.test.context.junit4.SpringRunner;
-
-import javax.rmi.CORBA.ValueHandler;
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -52,9 +44,6 @@ public class TestEmployeeRestController {
     @Test
     public void retrieveAllEmployee_shouldReturnAllEmployees() throws JsonProcessingException {
         //arrange
-
-//        setup();
-
         final String apiUrl = "http://localhost:" + port + "/api/v1/employees";
 
         HttpEntity request = new HttpEntity(new HttpHeaders());
@@ -63,10 +52,11 @@ public class TestEmployeeRestController {
         ResponseEntity<String> response = testRestTemplate.exchange(apiUrl, HttpMethod.GET, request, String.class);
         ObjectMapper om = new ObjectMapper();
 
-        Page<Employee> employeeList = om.readValue(response.getBody(), new TypeReference<CustomPageImpl<Employee>>() {
-        });
+//        Page<Employee> employeeList = om.readValue(response.getBody(), new TypeReference<CustomPageImpl<Employee>>() {
+//        });
 
         log.info(response.getBody());
+//        log.info("Number of records : " + employeeList.getSize());
 
         //assert
         assertThat(response.getStatusCode()).isEqualByComparingTo(HttpStatus.OK);
