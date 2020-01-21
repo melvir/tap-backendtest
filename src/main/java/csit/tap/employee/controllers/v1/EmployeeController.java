@@ -17,14 +17,14 @@ import java.util.Optional;
 @Log
 @RestController
 @CrossOrigin
-@RequestMapping(value = "/api/v1/employee")
-public class EmployeeV1 {
+@RequestMapping(value = "/api/v1/employees")
+public class EmployeeController {
 
     @Autowired
     private EmployeeService employeeService;
 
-    @RequestMapping(value = "/all", method = RequestMethod.GET)
-    public ResponseEntity<Page<Employee>> retrieveAllEmployees(HttpServletRequest request,
+    @GetMapping
+    public ResponseEntity<?> retrieveAllEmployees(HttpServletRequest request,
                          @RequestParam(defaultValue =  "0") Integer pageNo,
                          @RequestParam(defaultValue =  "5") Integer pageSize,
                          @RequestParam(defaultValue =  "id") String sortBy) throws Exception {
