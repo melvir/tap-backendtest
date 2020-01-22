@@ -27,10 +27,20 @@ public class EmployeeController {
     public ResponseEntity<?> retrieveAllEmployees(HttpServletRequest request,
                          @RequestParam(defaultValue =  "0") Integer pageNo,
                          @RequestParam(defaultValue =  "5") Integer pageSize,
-                         @RequestParam(defaultValue =  "id") String sortBy) throws Exception {
+                         @RequestParam(defaultValue =  "id") String sortBy,
+                         @RequestParam(required = false) String department) throws Exception {
 
         log.info("Received request for all employees from user id = ");
-        Page<Employee> employeeList = employeeService.findAll(pageNo, pageSize, sortBy);
+
+        Page<Employee> employeeList;
+
+        if (department == null) {
+            employeeList = employeeService.findAll(pageNo, pageSize, sortBy);
+            log.info(employeeList.getContent().toString());
+        }
+        else{
+            employeeList = employeeService.findEmployeeByDepartment(pageNo, pageSize, sortBy, department);
+        }
 
         return new ResponseEntity<>(employeeList, HttpStatus.OK);
     }

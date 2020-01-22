@@ -27,7 +27,7 @@ public class EmployeeRepositoryMock2 implements EmployeeRepository {
     }
 
     @Override
-    public Employee findByDepartment(String name) {
+    public Page<Employee> findByDepartment(String department, Pageable pageable) {
         return null;
     }
 

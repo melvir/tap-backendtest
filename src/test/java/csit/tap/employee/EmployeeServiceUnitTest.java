@@ -10,7 +10,7 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-import org.springframework.data.domain.Page;
+import org.springframework.data.domain.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -102,13 +102,22 @@ public class EmployeeServiceUnitTest {
 
     @Test
     public void whenGetEmployee_givenDepartment_shouldReturnEmployee() {
+
         //arrange
+        List<Employee> employeeList = new ArrayList<>();
+        Employee employee = new Employee("John", "ITA");
+        employeeList.add(employee);
 
+        Pageable paging = PageRequest.of(0, 10, Sort.by("id"));
+        Page<Employee> employeePage = new PageImpl<>(employeeList);
 
+        employeeRepository.setEmployeePage(employeePage);
 
         //act
+        Page<Employee> resultEmployee = employeeService.findEmployeeByDepartment(0, 10, "id", "ITA");
 
         //assert
+        assertThat(resultEmployee.getContent()).contains(employee);
     }
 
 }

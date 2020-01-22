@@ -1,5 +1,7 @@
 package csit.tap.employee.repositories;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 import csit.tap.employee.entities.Employee;
@@ -8,7 +10,7 @@ import csit.tap.employee.entities.Employee;
 public interface EmployeeRepository extends PagingAndSortingRepository<Employee, Long> {
     Employee findByName(String name);
 
-    Employee findByDepartment(String department);
+    Page<Employee> findByDepartment(String department, Pageable pageable);
 
     //Optional<Employee> findById (Long id);
     //Optional<Employee> findByName (String name);

@@ -4,6 +4,11 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import csit.tap.employee.entities.Employee;
 import csit.tap.employee.repositories.EmployeeRepository;
+import io.restassured.RestAssured;
+import io.restassured.path.json.JsonPath;
+import io.restassured.response.Response;
+import io.restassured.response.ResponseBody;
+import io.restassured.specification.RequestSpecification;
 import lombok.extern.java.Log;
 import org.junit.After;
 import org.junit.Test;
@@ -12,13 +17,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.data.domain.*;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static io.restassured.RestAssured.given;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @Log
 @RunWith(SpringRunner.class)
@@ -63,7 +69,8 @@ public class TestEmployeeRestController {
                         .jsonPath()
                         .getList("content", Employee.class);
 
-        assertEquals(response, employeeList);
+        assertThat(response).isEqualTo(employeeList);
+        //assertEquals(response, employeeList);
     }
 
     @Test
@@ -85,6 +92,32 @@ public class TestEmployeeRestController {
 
         given()
                 .get(apiUrl).then().statusCode(200);
+    }
+
+    @Test
+    public void whenGetEmployeeByDepartment_GivenDepartment_ShouldReturnEmployee() {
+
+        //arrange
+        Employee employee = new Employee("John", "ITA");
+        employeeRepository.save(employee);
+
+        //act
+        final String apiUrl = "http://localhost:" + port + "/api/v1/employees?department=ITA3";
+
+        String season = "2017";
+        int numberOfRaces = 20;
+
+        Response response = given().
+                get(apiUrl);
+        JsonPath jsonPathEvaluator = response.jsonPath();
+        String content = jsonPathEvaluator.get("Content");
+
+        log.info("content is ");
+        log.info(content);
+        //assert
+        assertThat(response.getStatusCode()).isEqualTo(200); //check status code is ok
+        //assertThat(content).contains; //check json body response
+
     }
 
     @After

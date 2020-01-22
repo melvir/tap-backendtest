@@ -7,7 +7,13 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -38,16 +44,15 @@ public class EmployeeRepositoryTest {
     public void getEmployee_givenDepartment_shouldReturnEmployee() {
 
         //arrange
-        for (int i = 0; i < 10 ; i++) {
-           Employee employee = new Employee("John" + i, "ITA" + i);
-           employeeRepository.save(employee);
-        }
+        Employee employee = new Employee("John", "ITA");
+        employeeRepository.save(employee);
 
         //act
-        Employee resultEmployee = employeeRepository.findByDepartment("ITA3");
+        Pageable paging = PageRequest.of(0, 10, Sort.by("id"));
+        Page<Employee> resultEmployee = employeeRepository.findByDepartment("ITA", paging);
 
         //assert
-        assertThat(resultEmployee.getName()).isEqualTo("John3");
+        assertThat(resultEmployee.getContent()).contains(employee);
     }
 
 }

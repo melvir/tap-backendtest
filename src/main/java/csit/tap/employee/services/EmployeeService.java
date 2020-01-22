@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Log
@@ -65,7 +66,7 @@ public class EmployeeService {
         Employee newEmployee = new Employee();
         newEmployee.setName(employee.getName());
         newEmployee.setDepartment(employee.getDepartment());
-        newEmployee.setCreatedDateTime(employee.getCreatedDateTime());
+        newEmployee.setCreatedDateTime(LocalDateTime.now());
         log.info("Saving Employee to store: name = " + employee.getName());
         employeeRepository.save(newEmployee);
 
@@ -75,5 +76,12 @@ public class EmployeeService {
     public Employee findEmployeeByName(String name) {
 
         return employeeRepository.findByName(name);
+    }
+
+    public Page<Employee> findEmployeeByDepartment(Integer pageNo, Integer pageSize, String sortBy, String department) {
+
+        Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
+
+        return employeeRepository.findByDepartment(department, paging);
     }
 }
