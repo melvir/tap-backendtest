@@ -27,6 +27,11 @@ public class EmployeeRepositoryMock2 implements EmployeeRepository {
     }
 
     @Override
+    public Employee findByDepartment(String name) {
+        return null;
+    }
+
+    @Override
     public Iterable<Employee> findAll(Sort sort) {
         return null;
     }

@@ -129,4 +129,9 @@ public class EmployeeRepositoryMock implements EmployeeRepository {
 
         return emp.get(0);
     }
+
+    @Override
+    public Employee findByDepartment(String name) {
+        return null;
+    }
 }

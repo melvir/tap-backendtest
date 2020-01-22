@@ -96,4 +96,15 @@ public class EmployeeServiceUnitTest {
 
     }
 
+    @Test
+    public void whenGetEmployee_givenDepartment_shouldReturnEmployee() {
+        //arrange
+
+
+
+        //act
+
+        //assert
+    }
+
 }
