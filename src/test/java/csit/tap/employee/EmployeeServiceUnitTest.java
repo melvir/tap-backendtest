@@ -91,12 +91,12 @@ public class EmployeeServiceUnitTest {
 
         existingEmployee.setName("");
 
-        //asset
-        employeeService.updateEmployee(existingEmployee);
+        //assert
+        thrown.expect(InvalidDataEntry.class);
+        thrown.expectMessage( "All data entry cannot be empty ");
 
         //act
-        thrown.expect(InvalidDataEntry.class);
-        thrown.expectMessage( "All data entry cannot be empty");
+        employeeService.updateEmployee(existingEmployee);
 
     }
 
