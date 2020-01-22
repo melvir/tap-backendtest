@@ -4,16 +4,21 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import csit.tap.employee.entities.Employee;
 import csit.tap.employee.repositories.EmployeeRepository;
+import io.restassured.RestAssured;
+import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
+import io.restassured.response.ResponseBody;
+import io.restassured.specification.RequestSpecification;
 import lombok.extern.java.Log;
 import org.json.JSONObject;
 import org.junit.After;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.data.domain.*;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
@@ -23,6 +28,7 @@ import static io.restassured.RestAssured.given;
 import static io.restassured.RestAssured.when;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @Log
 @RunWith(SpringRunner.class)
@@ -75,6 +81,7 @@ public class TestEmployeeRestController {
     public void whenGetEmployeeByName_GivenName_ShouldReturnEmployee() {
 
         //arrange
+
         List<Employee> employeeList = new ArrayList<>();
 
         for (int i = 0; i < 10; i++) {
@@ -107,6 +114,32 @@ public class TestEmployeeRestController {
 
         //assert
         assertThat(response.getStatusCode()).isEqualTo(200);
+    }
+
+    @Test
+    public void whenGetEmployeeByDepartment_GivenDepartment_ShouldReturnEmployee() {
+
+        //arrange
+        Employee employee = new Employee("John", "ITA");
+        employeeRepository.save(employee);
+
+        //act
+        final String apiUrl = "http://localhost:" + port + "/api/v1/employees?department=ITA";
+
+        //Response response = given().get(apiUrl);
+        //ResponseBody body = response.getBody();
+
+        JsonPath jsonPath = RestAssured.given()
+                .when()
+                .get(apiUrl)
+                .then()
+                .statusCode(200)
+                .extract().body().jsonPath();
+
+        List<Employee> employeeList = jsonPath.getList("content", Employee.class);
+
+        //assert
+        assertThat(employeeList).contains(employee); //check return contains the object
     }
 
     @After

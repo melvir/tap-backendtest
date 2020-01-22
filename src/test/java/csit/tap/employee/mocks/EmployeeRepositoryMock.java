@@ -2,10 +2,7 @@ package csit.tap.employee.mocks;
 
 import csit.tap.employee.entities.Employee;
 import csit.tap.employee.repositories.EmployeeRepository;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,6 +12,8 @@ public class EmployeeRepositoryMock implements EmployeeRepository {
     private int saveCalledTimes;
 
     private List<Employee> employeeList;
+
+    private Page<Employee> employeePage;
 
     public boolean verify(String methodName, int wasCalled){
         if(methodName.equalsIgnoreCase("save"))
@@ -127,10 +126,24 @@ public class EmployeeRepositoryMock implements EmployeeRepository {
         this.employeeList = employeeList;
     }
 
+    public void setEmployeePage(Page<Employee> employeePage) {
+        this.employeePage = employeePage;
+    }
+
     @Override
     public Employee findByName(String name) {
 
       List<Employee> emp = employeeList.stream().filter(employee -> employee.getName().equalsIgnoreCase(name)).collect(Collectors.toList());
       return emp.get(0);
     }
+
+    @Override
+    public Page<Employee> findByDepartment(String department, Pageable pageable) {
+        List<Employee> emp = employeePage.stream().filter(employee -> employee.getDepartment().equalsIgnoreCase(String.valueOf(department))).collect(Collectors.toList());
+        Pageable paging = PageRequest.of(0, 10, Sort.by("id"));
+        Page<Employee> employeePage = new PageImpl<>(emp);
+
+        return employeePage;
+    }
+
 }

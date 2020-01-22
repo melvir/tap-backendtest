@@ -1,19 +1,22 @@
 package csit.tap.employee;
 
 import csit.tap.employee.entities.Employee;
+import csit.tap.employee.exception.InvalidDataEntry;
 import csit.tap.employee.mocks.EmployeeRepositoryMock;
 import csit.tap.employee.services.EmployeeService;
 import org.assertj.core.api.ThrowableAssert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-import org.springframework.data.domain.Page;
+import org.springframework.data.domain.*;
 
 import javax.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,6 +29,9 @@ public class EmployeeServiceUnitTest {
     private EmployeeRepositoryMock employeeRepository = new EmployeeRepositoryMock();
 
     private EmployeeService employeeService = new EmployeeService(employeeRepository);
+
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
 
     @Before
     public void setup() {
@@ -84,23 +90,40 @@ public class EmployeeServiceUnitTest {
     }
 
     @Test
-    public void whenGetEmployeeByName_givenName_shouldReturnEmployee() {
+    public void whenUpdateEmployee_givenEmptyName_shouldThrowInvalidDataException() {
         //arrange
-        List<Employee> employees = new ArrayList<>();
+        Employee existingEmployee = new Employee("Melvir", "Depart M");
+        employeeRepository.setEmployeeList(Arrays.asList(existingEmployee));
 
-        for (int i = 0; i < 10; i++) {
-            Employee employee = new Employee("Mary " + i, "Department" + i);
-            employees.add(employee);
-        }
-
-        employeeRepository.setEmployeeList(employees);
-
-        //act
-        Employee employeeResult =  employeeService.findEmployeeByName("Mary 2");
+        existingEmployee.setName("");
 
         //assert
-        assertThat(employeeResult.getName()).isEqualTo("Mary 2");
+        thrown.expect(InvalidDataEntry.class);
+        thrown.expectMessage( "All data entry cannot be empty ");
 
+        //act
+        //employeeService.updateEmployee(1L,existingEmployee);
+
+    }
+
+    @Test
+    public void whenGetEmployee_givenDepartment_shouldReturnEmployee() {
+
+        //arrange
+        List<Employee> employeeList = new ArrayList<>();
+        Employee employee = new Employee("John", "ITA");
+        employeeList.add(employee);
+
+        Pageable paging = PageRequest.of(0, 10, Sort.by("id"));
+        Page<Employee> employeePage = new PageImpl<>(employeeList);
+
+        employeeRepository.setEmployeePage(employeePage);
+
+        //act
+        Page<Employee> resultEmployee = employeeService.findEmployeeByDepartment(0, 10, "id", "ITA");
+
+        //assert
+        assertThat(resultEmployee.getContent()).contains(employee);
     }
 
     @Test
