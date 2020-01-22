@@ -52,21 +52,22 @@ The example applicationn shows different test layers according to the [Test Pyra
 
 * Controllers
   * Do integration testing from end to end up till persisting data into database. 
-  * Do not only do unit testing of controller.
+  * Do not only do unit testing of controller (does not contain any business-logic)
   
 * Services
-  * mock the repository methods
-  * test business logic
+  * Mock the repository (either by using Mockito or custom POJO)
+  * Do unit testing with aim to isolate it for testing business logic
   
 * Repostories
-  * only applicable for custom query methods (e.g. jpa /jpl)
- 
+  * Only applicable for custom query methods (e.g. jpa /jpl)
+  * Using DataJpaTest
+  
 * Model
   * Do not test
 
 ## Do's and Don't's
 * Do not test the parameter 
-
+* Test the input and output 
 
 ## Mocking
 * Create your own java mock classes 
