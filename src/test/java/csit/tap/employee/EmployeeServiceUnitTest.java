@@ -4,6 +4,7 @@ import csit.tap.employee.entities.Employee;
 import csit.tap.employee.exception.InvalidDataEntry;
 import csit.tap.employee.mocks.EmployeeRepositoryMock;
 import csit.tap.employee.services.EmployeeService;
+import org.assertj.core.api.ThrowableAssert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -12,12 +13,15 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 import org.springframework.data.domain.*;
 
+import javax.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @RunWith(JUnit4.class)
 public class EmployeeServiceUnitTest {
@@ -33,6 +37,8 @@ public class EmployeeServiceUnitTest {
     public void setup() {
         Employee newEmployee = new Employee("Alex", "ITA");
     }
+
+
 
     @Test
     public void whenSaveEmployee_givenEmployee_shouldReturnEmployee(){
@@ -96,7 +102,7 @@ public class EmployeeServiceUnitTest {
         thrown.expectMessage( "All data entry cannot be empty ");
 
         //act
-        employeeService.updateEmployee(existingEmployee);
+        //employeeService.updateEmployee(1L,existingEmployee);
 
     }
 
@@ -120,4 +126,50 @@ public class EmployeeServiceUnitTest {
         assertThat(resultEmployee.getContent()).contains(employee);
     }
 
+    @Test
+    public void whenUpdateEmployee_givenEmployeeID_shouldUpdateEmployee(){
+        //arrange
+        List<Employee> employees = new ArrayList<>();
+
+        for (int i = 0; i < 10; i++) {
+            Employee employee = new Employee("Mary " + i, "Department" + i);
+            employee.setId((long)i);
+            employees.add(employee);
+        }
+        employeeRepository.setEmployeeList(employees);
+        Optional<Employee> employeeToUpdate = employeeRepository.findById(0L);
+        employeeToUpdate.get().setName("new_Mary 0");
+        employeeToUpdate.get().setDepartment("new_Department 0");
+
+        //act
+        Employee resultEmployee = employeeService.updateEmployee(0L,employeeToUpdate.get());
+
+        //assert
+        //assertThat(employeeRepository.verify("save", 1)).isTrue();
+        assertThat(employeeToUpdate.get().equals(resultEmployee));
+    }
+
+    @Test
+    public void whenUpdateEmployee_givenEmployeeIdNotFound_shouldNotUpdateEmployee(){
+        //arrange
+        List<Employee> employees = new ArrayList<>();
+
+        for (int i = 0; i < 10; i++) {
+            Employee employee = new Employee("Mary " + i, "Department" + i);
+            employee.setId((long)i);
+            employees.add(employee);
+        }
+        employeeRepository.setEmployeeList(employees);
+
+        Optional<Employee> employeeToUpdate = employeeRepository.findById(0L);
+        employeeToUpdate.get().setName("new_Mary 0");
+        employeeToUpdate.get().setDepartment("new_Department 0");
+
+        //assert
+        assertThatThrownBy(() -> {
+                    employeeService.updateEmployee(20L, employeeToUpdate.get());
+                }
+        ).isInstanceOf(javax.persistence.EntityNotFoundException.class).hasMessage("id - 20");
+
+    }
 }

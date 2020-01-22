@@ -74,6 +74,11 @@ public class EmployeeRepositoryMock implements EmployeeRepository {
 
     @Override
     public Optional<Employee> findById(Long aLong) {
+        for(Employee e : employeeList) {
+            if(e.getId() == aLong) {
+                return Optional.of(e);
+            }
+        }
         return Optional.empty();
     }
 
@@ -129,8 +134,7 @@ public class EmployeeRepositoryMock implements EmployeeRepository {
     public Employee findByName(String name) {
 
       List<Employee> emp = employeeList.stream().filter(employee -> employee.getName().equalsIgnoreCase(name)).collect(Collectors.toList());
-
-        return emp.get(0);
+      return emp.get(0);
     }
 
     @Override

@@ -10,6 +10,7 @@ import io.restassured.response.Response;
 import io.restassured.response.ResponseBody;
 import io.restassured.specification.RequestSpecification;
 import lombok.extern.java.Log;
+import org.json.JSONObject;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,6 +25,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static io.restassured.RestAssured.given;
+import static io.restassured.RestAssured.when;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Log
@@ -61,6 +65,7 @@ public class TestEmployeeRestController {
         //act
         List<Employee> response =
                 given()
+                        .header("Content-Type","application/json")
                         .get(apiUrl)
                         .then()
                         .statusCode(200)
@@ -69,8 +74,7 @@ public class TestEmployeeRestController {
                         .jsonPath()
                         .getList("content", Employee.class);
 
-        assertThat(response).isEqualTo(employeeList);
-        //assertEquals(response, employeeList);
+        assertEquals(response, employeeList);
     }
 
     @Test
@@ -88,10 +92,28 @@ public class TestEmployeeRestController {
 
         //act
         final String apiUrl = "http://localhost:" + port + "/api/v1/employees?name=alex 2";
-
-
         given()
-                .get(apiUrl).then().statusCode(200);
+                .get(apiUrl)
+                .then().
+                statusCode(200);
+    }
+
+    @Test
+    public void whenUpdateEmployee_GivenId_ShouldReturnEmployee() {
+
+        //arrange
+        Employee employee = new Employee("Mel", "department");
+        employeeRepository.save(employee);
+        employee.setName("Mel 1");
+
+        //act
+        final String apiUrl = "http://localhost:" + port + "/api/v1/employees/update/1";
+
+        Response response = given().when().body(employee)
+                .put(apiUrl);
+
+        //assert
+        assertThat(response.getStatusCode()).isEqualTo(200);
     }
 
     @Test
@@ -106,7 +128,7 @@ public class TestEmployeeRestController {
 
         //Response response = given().get(apiUrl);
         //ResponseBody body = response.getBody();
-        
+
         JsonPath jsonPath = RestAssured.given()
                 .when()
                 .get(apiUrl)
