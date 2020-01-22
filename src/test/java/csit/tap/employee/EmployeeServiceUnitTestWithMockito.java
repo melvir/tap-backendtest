@@ -1,7 +1,6 @@
 package csit.tap.employee;
 
 import csit.tap.employee.entities.Employee;
-import csit.tap.employee.mocks.EmployeeRepositoryMock;
 import csit.tap.employee.repositories.EmployeeRepository;
 import csit.tap.employee.services.EmployeeService;
 import org.junit.Before;
