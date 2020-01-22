@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import csit.tap.employee.entities.Employee;
 import csit.tap.employee.repositories.EmployeeRepository;
 import lombok.extern.java.Log;
+import org.junit.After;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,6 +64,32 @@ public class TestEmployeeRestController {
                         .getList("content", Employee.class);
 
         assertEquals(response, employeeList);
+    }
+
+    @Test
+    public void whenGetEmployeeByName_GivenName_ShouldReturnEmployee() {
+
+        //arrange
+
+        List<Employee> employeeList = new ArrayList<>();
+
+        for (int i = 0; i < 10; i++) {
+            Employee employee = new Employee("alex" + i, "department " + i);
+            employee = employeeRepository.save(employee);
+            employeeList.add(employee);
+        }
+
+        //act
+        final String apiUrl = "http://localhost:" + port + "/api/v1/employees?name=alex 2";
+
+
+        given()
+                .get(apiUrl).then().statusCode(200);
+    }
+
+    @After
+    public void tearDown() {
+        employeeRepository.deleteAll();
     }
 
 }
