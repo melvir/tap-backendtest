@@ -76,4 +76,24 @@ public class EmployeeServiceUnitTest {
 
     }
 
+    @Test
+    public void whenGetEmployeeByName_givenName_shouldReturnEmployee() {
+        //arrange
+        List<Employee> employees = new ArrayList<>();
+
+        for (int i = 0; i < 10; i++) {
+            Employee employee = new Employee("Mary " + i, "Department" + i);
+            employees.add(employee);
+        }
+
+        employeeRepository.setEmployeeList(employees);
+
+        //act
+        Employee employeeResult =  employeeService.findEmployeeByName("Mary 2");
+
+        //assert
+        assertThat(employeeResult.getName()).isEqualTo("Mary 2");
+
+    }
+
 }

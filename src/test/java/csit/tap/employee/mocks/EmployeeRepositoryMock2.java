@@ -3,52 +3,27 @@ package csit.tap.employee.mocks;
 import csit.tap.employee.entities.Employee;
 import csit.tap.employee.repositories.EmployeeRepository;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
-public class EmployeeRepositoryMock implements EmployeeRepository {
-    private int saveCalledTimes;
+public class EmployeeRepositoryMock2 implements EmployeeRepository {
 
     private List<Employee> employeeList;
 
-    public boolean verify(String methodName, int wasCalled){
-        if(methodName.equalsIgnoreCase("save"))
-            return wasCalled == saveCalledTimes;
-        return false;
+    public List<Employee> getEmployeeList() {
+        return employeeList;
     }
 
-    public EmployeeRepositoryMock() {
-        super();
-    }
-
-    @Override
-    public int hashCode() {
-        return super.hashCode();
+    public void setEmployeeList(List<Employee> employeeList) {
+        this.employeeList = employeeList;
     }
 
     @Override
-    public boolean equals(Object obj) {
-        return super.equals(obj);
-    }
-
-    @Override
-    protected Object clone() throws CloneNotSupportedException {
-        return super.clone();
-    }
-
-    @Override
-    public String toString() {
-        return super.toString();
-    }
-
-    @Override
-    protected void finalize() throws Throwable {
-        super.finalize();
+    public Employee findByName(String name) {
+        return null;
     }
 
     @Override
@@ -57,14 +32,12 @@ public class EmployeeRepositoryMock implements EmployeeRepository {
     }
 
     @Override
-
     public Page<Employee> findAll(Pageable pageable) {
-        return new PageImpl<Employee>(employeeList.subList(pageable.getPageNumber(), pageable.getPageSize()), pageable, pageable.getPageSize());
+        return null;
     }
 
     @Override
     public <S extends Employee> S save(S s) {
-        saveCalledTimes++;
         return null;
     }
 
@@ -116,17 +89,5 @@ public class EmployeeRepositoryMock implements EmployeeRepository {
     @Override
     public void deleteAll() {
 
-    }
-
-    public void setEmployeeList(List<Employee> employeeList) {
-        this.employeeList = employeeList;
-    }
-
-    @Override
-    public Employee findByName(String name) {
-
-      List<Employee> emp = employeeList.stream().filter(employee -> employee.getName().equalsIgnoreCase(name)).collect(Collectors.toList());
-
-        return emp.get(0);
     }
 }
