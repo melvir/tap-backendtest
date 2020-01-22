@@ -102,16 +102,22 @@ public class TestEmployeeRestController {
         employeeRepository.save(employee);
 
         //act
-        final String apiUrl = "http://localhost:" + port + "/api/v1/employees?department=ITA3";
+        final String apiUrl = "http://localhost:" + port + "/api/v1/employees?department=ITA";
 
-        Response response = given().get(apiUrl);
+        //Response response = given().get(apiUrl);
+        //ResponseBody body = response.getBody();
+        
+        JsonPath jsonPath = RestAssured.given()
+                .when()
+                .get(apiUrl)
+                .then()
+                .statusCode(200)
+                .extract().body().jsonPath();
 
-        JsonPath jsonPathEvaluator = response.jsonPath();
-        String content = jsonPathEvaluator.get("Content");
+        List<Employee> employeeList = jsonPath.getList("content", Employee.class);
 
         //assert
-        assertThat(response.getStatusCode()).isEqualTo(200); //check status code is ok
-
+        assertThat(employeeList).contains(employee); //check return contains the object
     }
 
     @After
