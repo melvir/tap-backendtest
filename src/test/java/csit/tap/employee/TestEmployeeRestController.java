@@ -106,7 +106,7 @@ public class TestEmployeeRestController {
 
         //Response response = given().get(apiUrl);
         //ResponseBody body = response.getBody();
-        
+
         JsonPath jsonPath = RestAssured.given()
                 .when()
                 .get(apiUrl)
