@@ -11,7 +11,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
 
 import javax.persistence.EntityNotFoundException;
@@ -47,7 +46,7 @@ public class EmployeeService {
 
         return employeeRepository.findById(id);
     }
-    
+
     public void deleteEmployee(long id) {
         employeeRepository.deleteById(id);
     }
@@ -60,17 +59,17 @@ public class EmployeeService {
         newEmployee.setDepartment(employee.getDepartment());
         newEmployee.setCreatedDateTime(employee.getCreatedDateTime());
         log.info("Saving Employee to store: name = " + employee.getName());
-        System.out.println(employeeRepository == null);
         employeeRepository.save(newEmployee);
 
         return newEmployee;
     }
-    
+
     //Update an employee
     public Employee updateEmployee(Long id,Employee employee)
     {
     	Optional<Employee> existingEmployee = employeeRepository.findById(id);
         if (existingEmployee.isPresent()) {
+            System.out.println("employee exist");
         	Employee employeeToUpdate = existingEmployee.get();
             employeeToUpdate.setName(employee.getName());
             employeeToUpdate.setDepartment(employee.getDepartment());
@@ -84,5 +83,8 @@ public class EmployeeService {
         }
     }
 
-    
+    public Employee findEmployeeByName(String name) {
+
+        return employeeRepository.findByName(name);
+    }
 }

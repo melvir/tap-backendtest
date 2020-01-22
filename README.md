@@ -48,6 +48,7 @@ The example applicationn shows different test layers according to the [Test Pyra
 ## What to test & why test / Minimal Code coverage
 * API
   * Test other APIs that your app is consuming and asser the result to be the same
+  * Test JSON response
 
 * Controllers
   * Do integration testing from end to end up till persisting data into database. 
@@ -73,6 +74,9 @@ The example applicationn shows different test layers according to the [Test Pyra
    * Low learning curve
 * Using Mockito
    * Power mockito
+
+## Techniques
+* Use rest-assured to test specific JSON response by specifying the path.
 
 ## List of guides
 * Web Layer test : https://spring.io/guides/gs/testing-web/

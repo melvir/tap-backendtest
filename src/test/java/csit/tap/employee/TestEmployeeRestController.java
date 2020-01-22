@@ -4,19 +4,25 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import csit.tap.employee.entities.Employee;
 import csit.tap.employee.repositories.EmployeeRepository;
+import io.restassured.response.Response;
 import lombok.extern.java.Log;
+import org.json.JSONObject;
 import org.junit.After;
-import org.junit.BeforeClass;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.http.*;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import static io.restassured.RestAssured.given;
+import static io.restassured.RestAssured.when;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @Log
 @RunWith(SpringRunner.class)
@@ -32,88 +38,80 @@ public class TestEmployeeRestController {
     @Autowired
     private TestRestTemplate testRestTemplate;
 
-    //BeforeClass is used to execute before the test run.
-    @BeforeClass
-    public void setup() {
-        for (int i = 0; i < 10; i++) {
-            Employee employee = new Employee("alex" + i, "department " + i);
-            employeeRepository.save(employee);
-        }
-    }
+    @Autowired
+    ObjectMapper objectMapper;
 
     @Test
     public void retrieveAllEmployee_shouldReturnAllEmployees() throws JsonProcessingException {
         //arrange
-        final String apiUrl = "http://localhost:" + port + "/api/v1/employees";
 
-        HttpEntity request = new HttpEntity(new HttpHeaders());
+        List<Employee> employeeList = new ArrayList<>();
+
+//      setup();
+        for (int i = 0; i < 10; i++) {
+            Employee employee = new Employee("alex" + i, "department " + i);
+            employee = employeeRepository.save(employee);
+            employeeList.add(employee);
+        }
+
+        final String apiUrl = "http://localhost:" + port + "/api/v1/employees?pageNo=0&pageSize=10";
 
         //act
-        ResponseEntity<String> response = testRestTemplate.exchange(apiUrl, HttpMethod.GET, request, String.class);
-        ObjectMapper om = new ObjectMapper();
+        List<Employee> response =
+                given()
+                        .header("Content-Type","application/json")
+                        .get(apiUrl)
+                        .then()
+                        .statusCode(200)
+                        .extract()
+                        .body()
+                        .jsonPath()
+                        .getList("content", Employee.class);
 
-//        Page<Employee> employeeList = om.readValue(response.getBody(), new TypeReference<CustomPageImpl<Employee>>() {
-//        });
+        assertEquals(response, employeeList);
+    }
 
-        log.info(response.getBody());
-//        log.info("Number of records : " + employeeList.getSize());
+    @Test
+    public void whenGetEmployeeByName_GivenName_ShouldReturnEmployee() {
+
+        //arrange
+        List<Employee> employeeList = new ArrayList<>();
+
+        for (int i = 0; i < 10; i++) {
+            Employee employee = new Employee("alex" + i, "department " + i);
+            employee = employeeRepository.save(employee);
+            employeeList.add(employee);
+        }
+
+        //act
+        final String apiUrl = "http://localhost:" + port + "/api/v1/employees?name=alex 2";
+        given()
+                .get(apiUrl)
+                .then().
+                statusCode(200);
+    }
+
+    @Test
+    public void whenUpdateEmployee_GivenId_ShouldReturnEmployee() {
+
+        //arrange
+        Employee employee = new Employee("Mel", "department");
+        employeeRepository.save(employee);
+        employee.setName("Mel 1");
+
+        //act
+        final String apiUrl = "http://localhost:" + port + "/api/v1/employees/update/1";
+
+        Response response = given().when().body(employee)
+                .put(apiUrl);
 
         //assert
-        assertThat(response.getStatusCode()).isEqualByComparingTo(HttpStatus.OK);
+        assertThat(response.getStatusCode()).isEqualTo(200);
     }
 
     @After
     public void tearDown() {
         employeeRepository.deleteAll();
     }
-
-//    private HttpEntity buildRequest() {
-//        HttpHeaders headers = new HttpHeaders();
-//        return new HttpEntity(headers);
-//    }
-
-
-//    @Test
-//    public void it_should_return_all_employees() throws Exception
-//    {
-//
-//        mvc.perform( MockMvcRequestBuilders
-//                .get("/api/v1/employee/all")
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .header("Origin","*"))
-//                .andExpect(status().isOk());
-//                //.andExpect(MockMvcResultMatchers.jsonPath("$.id").exists());
-//    }
-//
-//    @Test
-//    public void it_should_return_created_employee() throws Exception
-//    {
-//
-//        mvc.perform( MockMvcRequestBuilders
-//                .post("/api/v1/employee/new")
-//                .content(asJsonString(new Employee("Mary", "CST")))
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .accept(MediaType.APPLICATION_JSON)
-//                .header("Origin","*"))
-//                .andExpect(status().isCreated());
-//                //.andExpect(MockMvcResultMatchers.jsonPath("$[0].name").value("Mary"));
-//    }
-//
-//    @Test
-//    public void getEmployee() throws Exception{
-//        mvc.perform( MockMvcRequestBuilders
-//                .get("/api/v1/employee/retrieve_employee/1")
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .header("Origin","*"))
-//                .andExpect(status().isNoContent());
-//    }
-//
-//    public static String asJsonString(final Object obj) {
-//        try {
-//            return new ObjectMapper().writeValueAsString(obj);
-//        } catch (Exception e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
 
 }
