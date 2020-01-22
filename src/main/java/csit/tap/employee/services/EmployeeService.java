@@ -1,6 +1,7 @@
 package csit.tap.employee.services;
 
 import csit.tap.employee.entities.Employee;
+import csit.tap.employee.exception.InvalidDataEntry;
 import csit.tap.employee.repositories.EmployeeRepository;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +47,11 @@ public class EmployeeService {
     
     public void updateEmployee(Employee employee)
     {
+
+        if (employee.getName().isEmpty()) {
+            throw new InvalidDataEntry();
+        }
+
     	employeeRepository.save(employee);
     }
 
