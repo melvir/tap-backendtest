@@ -104,19 +104,13 @@ public class TestEmployeeRestController {
         //act
         final String apiUrl = "http://localhost:" + port + "/api/v1/employees?department=ITA3";
 
-        String season = "2017";
-        int numberOfRaces = 20;
+        Response response = given().get(apiUrl);
 
-        Response response = given().
-                get(apiUrl);
         JsonPath jsonPathEvaluator = response.jsonPath();
         String content = jsonPathEvaluator.get("Content");
 
-        log.info("content is ");
-        log.info(content);
         //assert
         assertThat(response.getStatusCode()).isEqualTo(200); //check status code is ok
-        //assertThat(content).contains; //check json body response
 
     }
 
