@@ -1,21 +1,23 @@
 package csit.tap.employee;
 
-import csit.tap.employee.entities.Employee;
-import csit.tap.employee.mocks.EmployeeRepositoryMock;
-import csit.tap.employee.services.EmployeeService;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
-import org.springframework.data.domain.Page;
+import static org.assertj.core.api.Assertions.assertThat;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.test.context.junit4.SpringRunner;
 
-@RunWith(JUnit4.class)
+import csit.tap.employee.entities.Employee;
+import csit.tap.employee.mocks.EmployeeRepositoryMock;
+import csit.tap.employee.services.EmployeeService;
+import lombok.extern.java.Log;
+
+@Log
+@RunWith(SpringRunner.class)
 public class EmployeeServiceUnitTest {
 
     private EmployeeRepositoryMock employeeRepository = new EmployeeRepositoryMock();
@@ -24,76 +26,104 @@ public class EmployeeServiceUnitTest {
 
     @Before
     public void setup() {
-        Employee newEmployee = new Employee("Alex", "ITA");
-    }
-
-    @Test
-    public void whenSaveEmployee_givenEmployee_shouldReturnEmployee(){
-        //arrange
-        Employee employeeToSave = new Employee("Mary", "CST", LocalDateTime.now());
-
-        //act
-        Employee newEmployee = employeeService.createEmployee(employeeToSave);
-
-        //assert
-        assertThat(newEmployee).isNotNull().isEqualTo(employeeToSave);
-    }
-
-    @Test
-    public void whenSaveEmployee_givenEmployee_shouldSaveEmployee(){
-        //arrange
-        Employee employeeToSave = new Employee("Mary", "CST", LocalDateTime.now());
-
-        //act
-        Employee newEmployee = employeeService.createEmployee(employeeToSave);
-
-        //assert
-//        verify(employeeRepository, times(1)).save(any());
-        assertThat(employeeRepository.verify("save", 1)).isTrue();
-        assertThat(newEmployee).isNotNull().isEqualTo(employeeToSave);
-    }
-
-    @Test
-    public void whenFindAllEmployees_ShouldReturnAllEmployees() throws Exception
-    {
-
-        //arrange
-        List<Employee> employeeList = new ArrayList<>();
+    	List<Employee> employees = new ArrayList<>();
 
         for (int i = 0; i < 10; i++) {
-            Employee employee = new Employee("Mary " + i, "Department" + i);
-            employeeList.add(employee);
-        }
-
-        employeeRepository.setEmployeeList(employeeList);
-
-        //act
-        Page<Employee> employeePage = employeeService.findAll(0, 5, "id");
-        assertThat(employeePage.getContent()).usingRecursiveFieldByFieldElementComparator().isEqualTo(employeeList.subList(0, 5));
-
-        //assert
-        assertThat(employeePage.getTotalElements()).isEqualTo(5);
-
-    }
-
-    @Test
-    public void whenGetEmployeeByName_givenName_shouldReturnEmployee() {
-        //arrange
-        List<Employee> employees = new ArrayList<>();
-
-        for (int i = 0; i < 10; i++) {
-            Employee employee = new Employee("Mary " + i, "Department" + i);
+        	Employee employee = new Employee();
+            employee.setId((long)i);
+            employee.setName("banana" + i);
+            employee.setDepartment("basket" + i);
             employees.add(employee);
         }
 
         employeeRepository.setEmployeeList(employees);
+    }
+
+//    @Test
+//    public void whenSaveEmployee_givenEmployee_shouldReturnEmployee(){
+//        //arrange
+//        Employee employeeToSave = new Employee("Mary", "CST", LocalDateTime.now());
+//
+//        //act
+//        Employee newEmployee = employeeService.createEmployee(employeeToSave);
+//
+//        //assert
+//        assertThat(newEmployee).isNotNull().isEqualTo(employeeToSave);
+//    }
+//
+//    @Test
+//    public void whenSaveEmployee_givenEmployee_shouldSaveEmployee(){
+//        //arrange
+//        Employee employeeToSave = new Employee("Mary", "CST", LocalDateTime.now());
+//
+//        //act
+//        Employee newEmployee = employeeService.createEmployee(employeeToSave);
+//
+//        //assert
+////        verify(employeeRepository, times(1)).save(any());
+//        assertThat(employeeRepository.verify("save", 1)).isTrue();
+//        assertThat(newEmployee).isNotNull().isEqualTo(employeeToSave);
+//    }
+//
+//    @Test
+//    public void whenFindAllEmployees_ShouldReturnAllEmployees() throws Exception
+//    {
+//
+//        //arrange
+//        List<Employee> employeeList = new ArrayList<>();
+//
+//        for (int i = 0; i < 10; i++) {
+//            Employee employee = new Employee("Mary " + i, "Department" + i);
+//            employeeList.add(employee);
+//        }
+//
+//        employeeRepository.setEmployeeList(employeeList);
+//
+//        //act
+//        Page<Employee> employeePage = employeeService.findAll(0, 5, "id");
+//        assertThat(employeePage.getContent()).usingRecursiveFieldByFieldElementComparator().isEqualTo(employeeList.subList(0, 5));
+//
+//        //assert
+//        assertThat(employeePage.getTotalElements()).isEqualTo(5);
+//
+//    }
+//
+//    @Test
+//    public void whenGetEmployeeByName_givenName_shouldReturnEmployee() {
+//        //arrange
+//        List<Employee> employees = new ArrayList<>();
+//
+//        for (int i = 0; i < 10; i++) {
+//            Employee employee = new Employee("Mary " + i, "Department" + i);
+//            employees.add(employee);
+//        }
+//
+//        employeeRepository.setEmployeeList(employees);
+//
+//        //act
+//        Employee employeeResult =  employeeService.findEmployeeByName("Mary 2");
+//
+//        //assert
+//        assertThat(employeeResult.getName()).isEqualTo("Mary 2");
+//
+//    }
+    
+    @Test
+    public void whenGetEmployeeById_givenId_shouldReturnEmployeeId() {
+        //arrange
+        
 
         //act
-        Employee employeeResult =  employeeService.findEmployeeByName("Mary 2");
+        Employee employeeResult = employeeService.findEmployeeById(2);
 
         //assert
-        assertThat(employeeResult.getName()).isEqualTo("Mary 2");
+        assertThat(employeeResult.getId()).isEqualTo(2);
 
+    }
+    
+    @After
+    public void tearDown() {
+        employeeRepository.deleteAll();
     }
 
 }

@@ -1,8 +1,5 @@
 package csit.tap.employee.services;
 
-import csit.tap.employee.entities.Employee;
-import csit.tap.employee.repositories.EmployeeRepository;
-import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -10,7 +7,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import csit.tap.employee.entities.Employee;
+import csit.tap.employee.repositories.EmployeeRepository;
+import lombok.extern.java.Log;
 
 @Log
 @Service
@@ -39,7 +38,7 @@ public class EmployeeService {
 //        return pagedResult.getContent();
 //    }
     
-    public Optional<Employee> getEmployee(long id) {
+    public Employee getEmployee(long id) {
 
         return employeeRepository.findById(id);
     }
@@ -70,4 +69,8 @@ public class EmployeeService {
 
         return employeeRepository.findByName(name);
     }
+
+	public Employee findEmployeeById(long id) {
+		return employeeRepository.findById(id);
+	}
 }

@@ -129,4 +129,10 @@ public class EmployeeRepositoryMock implements EmployeeRepository {
 
         return emp.get(0);
     }
+
+	@Override
+	public Employee findById(long id) {
+		List<Employee> emp = employeeList.stream().filter(employee -> employee.getId().equals(id)).collect(Collectors.toList());
+		return emp.get(0);
+	}
 }
