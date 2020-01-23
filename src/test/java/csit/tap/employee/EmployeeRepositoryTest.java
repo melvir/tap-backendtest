@@ -71,4 +71,19 @@ public class EmployeeRepositoryTest {
         //assert
         assertThat(resultEmployee).isEmpty();
     }
+
+    @Test
+    public void getEmployee_givenDepartment_shouldReturnEmployee() {
+
+        //arrange
+        Employee employee = new Employee("John", "ITA");
+        employeeRepository.save(employee);
+
+        //act
+        Pageable paging = PageRequest.of(0, 5, Sort.by("id"));
+        Page<Employee> resultEmployee = employeeRepository.findByDepartment("ITA3", paging);
+
+        //assert
+        assertThat(resultEmployee.getContent()).contains(employee);
+    }
 }
