@@ -13,7 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -41,18 +41,34 @@ public class EmployeeRepositoryTest {
     }
 
     @Test
-    public void getEmployee_givenDepartment_shouldReturnEmployee() {
+    public void getEmployee_givenId_shouldReturnEmployee() {
 
         //arrange
-        Employee employee = new Employee("John", "ITA");
-        employeeRepository.save(employee);
+        for (int i = 0; i < 10; i++) {
+            Employee employee = new Employee("Mel" + i, "Department " + i);
+            employeeRepository.save(employee);
+        }
 
         //act
-        Pageable paging = PageRequest.of(0, 10, Sort.by("id"));
-        Page<Employee> resultEmployee = employeeRepository.findByDepartment("ITA", paging);
+        Optional<Employee> resultEmployee = employeeRepository.findById(1L);
 
         //assert
-        assertThat(resultEmployee.getContent()).contains(employee);
+        assertThat(resultEmployee.get().getName()).isEqualTo("Mel0");
     }
 
+    @Test
+    public void getEmployee_givenInvalidId_shouldNotReturnEmployee() {
+
+        //arrange
+        for (int i = 0; i < 10; i++) {
+            Employee employee = new Employee("Mel" + i, "Department " + i);
+            employeeRepository.save(employee);
+        }
+
+        //act
+        Optional<Employee> resultEmployee = employeeRepository.findById(20L);
+
+        //assert
+        assertThat(resultEmployee).isEmpty();
+    }
 }

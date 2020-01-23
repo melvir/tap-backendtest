@@ -1,7 +1,6 @@
 package csit.tap.employee.services;
 
 import csit.tap.employee.entities.Employee;
-import csit.tap.employee.exception.InvalidDataEntry;
 import csit.tap.employee.repositories.EmployeeRepository;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +12,8 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
+
+import javax.persistence.EntityNotFoundException;
 
 @Log
 @Service
@@ -45,16 +46,7 @@ public class EmployeeService {
 
         return employeeRepository.findById(id);
     }
-    
-    public void updateEmployee(Employee employee)
-    {
 
-        if (employee.getName().isEmpty()) {
-            throw new InvalidDataEntry();
-        }
-
-    	employeeRepository.save(employee);
-    }
 
     public void deleteEmployee(long id) {
         employeeRepository.deleteById(id);
@@ -71,6 +63,25 @@ public class EmployeeService {
         employeeRepository.save(newEmployee);
 
         return newEmployee;
+    }
+
+    //Update an employee
+    public Employee updateEmployee(Long id,Employee employee)
+    {
+    	Optional<Employee> existingEmployee = employeeRepository.findById(id);
+        if (existingEmployee.isPresent()) {
+            System.out.println("employee exist");
+        	Employee employeeToUpdate = existingEmployee.get();
+            employeeToUpdate.setName(employee.getName());
+            employeeToUpdate.setDepartment(employee.getDepartment());
+            employeeToUpdate.setModifiedDateTime(LocalDateTime.now());
+            log.info("Update Entity in store: name = " + employee.getName());
+            return employeeRepository.save(employeeToUpdate);
+        }
+        else {
+        	log.severe("employeeToUpdate not found: id = " + id);
+        	throw new EntityNotFoundException("id - " + id);
+        }
     }
 
     public Employee findEmployeeByName(String name) {

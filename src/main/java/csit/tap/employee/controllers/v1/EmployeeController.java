@@ -45,19 +45,19 @@ public class EmployeeController {
         return new ResponseEntity<>(employeeList, HttpStatus.OK);
     }
 
-    @PutMapping(value = "/employees/{id}")
+    @PutMapping(value = "/update/{id}")
     public ResponseEntity<?> updateEmployee(@RequestBody Employee employee, @PathVariable long id){
-        Optional<Employee> employeeOptional = employeeService.getEmployee(id);
+    	Optional<Employee> employeeOptional = employeeService.getEmployee(id);
         log.info("Received request to update employee with id = " + id);
 
         if (employeeOptional.isPresent()){
             //Only able to update employee if the employee exist
-        	employeeService.updateEmployee(employee);
+        	employeeService.updateEmployee(id, employee);
             String msg = String.format("Employee with id = %d is updated", id);
             log.info(msg);
             return new ResponseEntity<>(employee, HttpStatus.OK);
         }
-        else {
+        else {     
             return ResponseEntity.notFound().build();
         }
     }
