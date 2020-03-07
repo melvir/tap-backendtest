@@ -1,0 +1,54 @@
+[
+  {
+    "uuid": "02eb7ff7569c9beedda699580d679557",
+    "name": "0-1 drop indicators",
+    "type": "tool",
+    "description": "",
+    "onet_element_id": "41111621",
+    "normalized_skill_name": "01 drop indicators"
+  },
+  {
+    "uuid": "a94d4806c457c4a596791eef636cdcc7",
+    "name": "100-foot measuring tapes",
+    "type": "tool",
+    "description": "",
+    "onet_element_id": "41114201",
+    "normalized_skill_name": "100foot measuring tapes"
+  },
+  {
+    "uuid": "6cc1298c92a50bceb8d65f4732f1df0e",
+    "name": "100 plus hatch pattern library",
+    "type": "tool",
+    "description": "",
+    "onet_element_id": "43232101",
+    "normalized_skill_name": "100 plus hatch pattern library"
+  },
+  {
+    "uuid": "f8ed7c21ef82d1df05cd7b6b16f371dc",
+    "name": "1099 prossoftware",
+    "type": "tool",
+    "description": "",
+    "onet_element_id": "43231603",
+    "normalized_skill_name": "1099 prossoftware"
+  },
+  {
+    "links": [
+      {
+        "rel": "self",
+        "href": "/skills?offset=0&limit=20"
+      },
+      {
+        "rel": "first",
+        "href": "/skills?offset=0&limit=20"
+      },
+      {
+        "rel": "next",
+        "href": "/skills?offset=20&limit=20"
+      },
+      {
+        "rel": "last",
+        "href": "/skills?offset=27060&limit=20"
+      }
+    ]
+  }
+]
