@@ -1,7 +1,6 @@
 package csit.tap.employee.external.beer;
 
 import csit.tap.employee.external.beer.client.BeerClient;
-import csit.tap.employee.external.beer.BeerService;
 import csit.tap.employee.external.intoxication.IntoxicationRepository;
 import csit.tap.employee.external.intoxication.IntoxicationStatus;
 import csit.tap.employee.external.intoxication.IntoxicationStatusDto;

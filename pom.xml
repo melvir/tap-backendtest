@@ -18,6 +18,7 @@
 		<java.version>1.8</java.version>
 	</properties>
 
+	<!-- region spring-snapshots : For Spring Cloud Contract-->
 	<repositories>
 		<repository>
 			<id>spring-snapshots</id>
@@ -39,6 +40,8 @@
 			</snapshots>
 		</pluginRepository>
 	</pluginRepositories>
+
+	<!-- endregion -->
 
 	<dependencies>
 		<dependency>
@@ -73,7 +76,7 @@
 			</exclusions>
 		</dependency>
 
-		<!-- Start : Contract Test Dependencies		-->
+		<!-- region : Spring Cloud Contract Dependencies		-->
 
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
@@ -87,7 +90,15 @@
 			<version>2.1.1.RELEASE</version>
 			<scope>test</scope>
 		</dependency>
-		<!--Start:	Feign Client Dependencies-->
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-contract-stub-runner</artifactId>
+			<version>2.1.1.RELEASE</version>
+			<scope>test</scope>
+		</dependency>
+		<!-- endregion -->
+
+		<!--region	Feign Client Dependencies-->
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-openfeign</artifactId>
@@ -98,19 +109,13 @@
 			<artifactId>spring-cloud-starter-netflix-ribbon</artifactId>
 			<version>2.2.1.RELEASE</version>
 		</dependency>
-		<!--End:	Feign Client Dependencies-->
-		<dependency>
-			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-contract-stub-runner</artifactId>
-			<version>2.1.1.RELEASE</version>
-			<scope>test</scope>
-		</dependency>
+		<!--endregion-->
 
+		<!-- region Mock Server dependencies-->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-webflux</artifactId>
 		</dependency>
-
 		<dependency>
 			<groupId>com.squareup.okhttp3</groupId>
 			<artifactId>okhttp</artifactId>
@@ -123,9 +128,8 @@
 			<version>4.0.1</version>
 			<scope>test</scope>
 		</dependency>
+		<!-- endregion -->
 
-
-		<!-- End : Contract Test Dependencies		-->
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
@@ -144,6 +148,8 @@
 		</dependency>
 
 	</dependencies>
+
+	<!--region dependencyManagement for spring cloud-->
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
@@ -155,8 +161,8 @@
 			</dependency>
 
 		</dependencies>
-
 	</dependencyManagement>
+	<!--endregion -->
 
 	<build>
 		<plugins>

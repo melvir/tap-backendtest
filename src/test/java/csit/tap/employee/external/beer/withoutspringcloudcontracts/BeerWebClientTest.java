@@ -20,6 +20,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
+import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static org.mockito.Mockito.mock;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -37,6 +38,7 @@ public class BeerWebClientTest {
 
     @Test
     public void getIntoxicationStatusFromExternalApi_ShouldTransformToIntoxicationStatus() throws IOException {
+        // arrange
         IntoxicationStatusDto stubResponse = om.readValue(new ClassPathResource("intoxication-status-stub.json").getFile(), IntoxicationStatusDto.class);
         PersonDto personDto = new PersonDto("marcin");
 
@@ -44,6 +46,7 @@ public class BeerWebClientTest {
                 new ClassPathResource("intoxication-status-stub.json").getFile()
                 , String.valueOf(StandardCharsets.UTF_8));
 
+        // mocking the server return
         mockWebServer.enqueue(
                 new MockResponse()
                         .setResponseCode(200)
@@ -51,8 +54,10 @@ public class BeerWebClientTest {
                         .setBody(stubContent)
         );
 
+        // act
         IntoxicationStatusDto statusDto = beerWebClient.GetIntoxicationStatus(personDto);
-        System.out.println(statusDto.getPreviousStatus());
-        System.out.println(statusDto.getCurrentStatus());
+
+        // assert
+        assertThat(statusDto).isEqualToComparingFieldByField(stubResponse);
     }
 }
