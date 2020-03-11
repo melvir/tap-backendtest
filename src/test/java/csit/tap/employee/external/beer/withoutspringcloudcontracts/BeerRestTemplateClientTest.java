@@ -21,6 +21,11 @@ import java.io.IOException;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
+/*
+ * We treat this as a unit test to only test the transformation of json to POJO
+ * We mock the json return of restTemplate using the stub contract provided,
+ *  in /resources/intoxication-status-stub.json
+ */
 @RunWith(MockitoJUnitRunner.class)
 public class BeerRestTemplateClientTest {
     private ObjectMapper om = new ObjectMapper();
@@ -36,7 +41,7 @@ public class BeerRestTemplateClientTest {
         // arrange
         IntoxicationStatusDto stubResponse = om.readValue(new ClassPathResource("intoxication-status-stub.json").getFile(), IntoxicationStatusDto.class);
 
-        HttpEntity<PersonDto> request = new HttpEntity<PersonDto>(new PersonDto("alvin"));
+        HttpEntity<PersonDto> request = new HttpEntity<>(new PersonDto("alvin"));
 
         Mockito.when(restTemplate.postForEntity("/beer", request, IntoxicationStatusDto.class))
                 .thenReturn(new ResponseEntity<>(stubResponse, HttpStatus.OK));

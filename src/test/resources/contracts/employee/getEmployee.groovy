@@ -3,7 +3,15 @@ package contracts.employee
 import org.springframework.cloud.contract.spec.Contract
 import org.springframework.http.HttpStatus
 
-UUID_REGEX = "([a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12})";
+
+/*
+* This class is to setup producer-side contract testing,
+*  together with resources/contracts/employee/getEmployee.groovy,
+* Upon maven build, an EmployeeTest will be generated in
+*  target/generated-test-sources/contracts/
+*/
+
+UUID_REGEX = "([a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12})"
 DATE_TIME_REGEX = "(\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}) "
 Contract.make {
     description "Get Employee"

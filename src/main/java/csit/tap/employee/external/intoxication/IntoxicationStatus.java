@@ -5,6 +5,9 @@ import lombok.*;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
+/*
+ * The Entity which would be saved from the remote call to the external MS
+ */
 @Entity
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor
 @EqualsAndHashCode

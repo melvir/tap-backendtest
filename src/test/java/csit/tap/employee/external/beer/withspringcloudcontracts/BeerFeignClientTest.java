@@ -13,6 +13,11 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
+/*
+ * With Spring Cloud Contracts, this test will run as an integration test using the BeerFeignClient
+ * @AutoConfigureStubRunner wires the server to the contract stubs provided by the producer of the api
+ * The runner also validates if the call and the response adheres to the contract set out by the producer
+ */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @RunWith(SpringRunner.class)
 @AutoConfigureStubRunner(ids = {"com.example:beer-api-producer-java:+:stubs:8090"}, stubsMode = StubRunnerProperties.StubsMode.LOCAL)

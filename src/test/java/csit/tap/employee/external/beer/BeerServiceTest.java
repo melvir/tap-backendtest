@@ -14,6 +14,9 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
+/*
+ * This unit test tests the business logic within BeerService
+ * This is similar to EmployeeServiceTest where we mock the return of the outside layers*/
 @RunWith(MockitoJUnitRunner.class)
 public class BeerServiceTest {
 

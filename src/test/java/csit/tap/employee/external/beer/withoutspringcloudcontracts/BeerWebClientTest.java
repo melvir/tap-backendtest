@@ -21,8 +21,12 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
-import static org.mockito.Mockito.mock;
 
+/*
+ * We treat this as a unit test to only test the transformation of json to POJO by WebClient
+ * We mock the json return of the remote server using a MockWebServer
+ * and the stub contract provided in /resources/intoxication-status-stub.json
+ */
 @RunWith(MockitoJUnitRunner.class)
 public class BeerWebClientTest {
     private ObjectMapper om = new ObjectMapper();
