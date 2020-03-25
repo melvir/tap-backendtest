@@ -93,16 +93,17 @@ public class EmployeeServiceUnitTest {
     public void whenUpdateEmployee_givenEmptyName_shouldThrowInvalidDataException() {
         //arrange
         Employee existingEmployee = new Employee("Melvir", "Depart M");
+        existingEmployee.setId(1L);
         employeeRepository.setEmployeeList(Arrays.asList(existingEmployee));
 
         existingEmployee.setName("");
 
         //assert
         thrown.expect(InvalidDataEntry.class);
-        thrown.expectMessage( "All data entry cannot be empty ");
+        thrown.expectMessage( "All data entry cannot be empty");
 
         //act
-        //employeeService.updateEmployee(1L,existingEmployee);
+        employeeService.updateEmployee(1L,existingEmployee);
 
     }
 

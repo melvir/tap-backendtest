@@ -1,6 +1,7 @@
 package csit.tap.employee.services;
 
 import csit.tap.employee.entities.Employee;
+import csit.tap.employee.exception.InvalidDataEntry;
 import csit.tap.employee.repositories.EmployeeRepository;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,7 +73,11 @@ public class EmployeeService {
         if (existingEmployee.isPresent()) {
             System.out.println("employee exist");
         	Employee employeeToUpdate = existingEmployee.get();
-            employeeToUpdate.setName(employee.getName());
+
+        	String name = employee.getName();
+        	if (name.isEmpty())
+        	    throw new InvalidDataEntry();
+            employeeToUpdate.setName(name);
             employeeToUpdate.setDepartment(employee.getDepartment());
             employeeToUpdate.setModifiedDateTime(LocalDateTime.now());
             log.info("Update Entity in store: name = " + employee.getName());
