@@ -94,13 +94,13 @@ public class EmployeeServiceUnitTest {
 
     @Before
     public void setup() {
-        Employee newEmployee = new Employee("Alex", "ITA");
+        Employee newEmployee = new Employee("Alex", "III");
     }
     
     @Test
     public void whenSaveEmployee_givenEmployee_shouldReturnEmployee(){
         //arrange
-        Employee employeeToSave = new Employee("Mary", "CST", LocalDateTime.now());
+        Employee employeeToSave = new Employee("Mary", "TTT", LocalDateTime.now());
 
         //act
         Employee newEmployee = employeeService.createEmployee(employeeToSave);
@@ -163,13 +163,13 @@ public class EmployeeServiceUnitTestWithMockito {
 
     @Before
     public void setup() {
-        Employee newEmployee = new Employee("Alex", "ITA");
+        Employee newEmployee = new Employee("Alex", "III");
     }
 
     @Test
     public void whenSaveEmployee_givenEmployee_shouldReturnEmployee(){
         //arrange
-        Employee employeeToSave = new Employee("Mary", "CST");
+        Employee employeeToSave = new Employee("Mary", "TTT");
 
         //act
         Employee newEmployee = employeeService.createEmployee(employeeToSave);
