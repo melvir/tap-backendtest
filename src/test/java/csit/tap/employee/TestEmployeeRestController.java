@@ -8,10 +8,7 @@ import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
-import io.restassured.response.ResponseBody;
-import io.restassured.specification.RequestSpecification;
 import lombok.extern.java.Log;
-import org.json.JSONObject;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,17 +16,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.data.domain.*;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static io.restassured.RestAssured.given;
-import static io.restassured.RestAssured.when;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.assertj.core.api.Assertions.assertThat;
 
 @Log
 @RunWith(SpringRunner.class)
@@ -47,6 +41,11 @@ public class TestEmployeeRestController {
 
     @Autowired
     ObjectMapper objectMapper;
+
+    @After
+    public void cleanIndex() {
+        employeeRepository.deleteAll(); //Assuming you have a collection
+    }
 
     @Test
     public void retrieveAllEmployee_shouldReturnAllEmployees() throws JsonProcessingException {
@@ -104,11 +103,11 @@ public class TestEmployeeRestController {
 
         //arrange
         Employee employee = new Employee("Mel", "department");
-        employeeRepository.save(employee);
         employee.setName("Mel 1");
+        Employee saved = employeeRepository.save(employee);
 
         //act
-        final String apiUrl = "http://localhost:" + port + "/api/v1/employees/update/1";
+        final String apiUrl = "http://localhost:" + port + "/api/v1/employees/update/" + saved.getId();
 
         Response response = given()
                 .when()
@@ -116,8 +115,9 @@ public class TestEmployeeRestController {
                 .body(employee)
                 .put(apiUrl);
 
+        int statusCode = response.getStatusCode();
         //assert
-        assertThat(response.getStatusCode()).isEqualTo(200);
+        assertThat(statusCode).isEqualTo(200);
     }
 
     @Test
