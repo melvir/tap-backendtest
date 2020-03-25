@@ -66,7 +66,7 @@ public class EmployeeRepositoryTest {
         }
 
         //act
-        Optional<Employee> resultEmployee = employeeRepository.findById(20L);
+        Optional<Employee> resultEmployee = employeeRepository.findById(11L);
 
         //assert
         assertThat(resultEmployee).isEmpty();
@@ -81,7 +81,7 @@ public class EmployeeRepositoryTest {
 
         //act
         Pageable paging = PageRequest.of(0, 5, Sort.by("id"));
-        Page<Employee> resultEmployee = employeeRepository.findByDepartment("ITA3", paging);
+        Page<Employee> resultEmployee = employeeRepository.findByDepartment("ITA", paging);
 
         //assert
         assertThat(resultEmployee.getContent()).contains(employee);
