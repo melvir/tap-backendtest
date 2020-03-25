@@ -80,7 +80,7 @@ The example applicationn shows different test layers according to the [Test Pyra
 * Using Mockito
    * Pros
        * Fast development of test cases
-       * Huge boiler plate codes can be automatically generated
+       * Huge boiler plate codes can be automatically generated 
    * Cons 
        * Tightly coupled to Mockito testing framework
        * Higher learning curve on Mockito API usage
@@ -96,3 +96,4 @@ The example applicationn shows different test layers according to the [Test Pyra
     * Install Lombok plugin under Settings > MarketPlace.    
 * IDE : Eclipse
     * You will need to install the lombok plugin manually into the Eclipse by double clicking on the lombok.jar and point to the eclipse.exe path. Restart your IDE and rebuild your project for the installation to take effect. 
+    * lombok.jar can be downloaded from https://projectlombok.org/download
