@@ -70,14 +70,28 @@ The example applicationn shows different test layers according to the [Test Pyra
 * Test the input and output 
 
 ## Mocking
-* Create your own java mock classes 
-   * Easy readabiliy
-   * Low learning curve
+* Create your own java mock classes
+   * Pros
+       * Easy readabiliy
+       * Low learning curve
+       * Dont need to keep up to date with Mokito standard
+   * Cons
+       * More coding effort 
 * Using Mockito
-   * Power mockito
+   * Pros
+       * Fast development of test cases
+   * Cons 
+       * Tightly coupled to Mockito testing framework
+       * Higher learning curve on Mockito API usage
 
 ## Techniques
 * Use rest-assured to test specific JSON response by specifying the path.
 
 ## List of guides
 * Web Layer test : https://spring.io/guides/gs/testing-web/
+
+## Environment Setup
+* IDE : Intelli J
+    * Lombok will be loaded automatically.
+* IDE : Eclipse
+    * You will need to install the lombok plugin manually into the Eclipse by double clicking on the lombok.jar and point to the eclipse.exe path. Restart your IDE and rebuild your project for the installation to take effect. 
