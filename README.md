@@ -21,14 +21,14 @@ The example applicationn shows different test layers according to the [Test Pyra
 ## Application Architecture
 ```
  ╭┄┄┄┄┄┄┄╮      ┌──────────┐      ┌──────────┐
- ┆   ☁   ┆  ←→  │    ☕     │  ←→  │    💾     │
+ ┆   ☁  ┆  ←→  │    ☕   │  ←→  │    💾    │
  ┆  Web  ┆ HTTP │  Spring  │      │ Database │
  ╰┄┄┄┄┄┄┄╯      │  Service │      └──────────┘
                 └──────────┘
                      ↑ JSON/HTTP
                      ↓
                 ┌──────────┐
-                │    ☁     │
+                │    ☁    │
                 │ Weather  │
                 │   API    │
                 └──────────┘
@@ -70,16 +70,17 @@ The example applicationn shows different test layers according to the [Test Pyra
 * Test the input and output 
 
 ## Mocking
-* Create your own java mock classes
+* Create your own Java mock classes
    * Pros
        * Easy readabiliy
-       * Low learning curve
+       * Just have to reuse your existing Java skills
        * Dont need to keep up to date with Mokito standard
    * Cons
        * More coding effort 
 * Using Mockito
    * Pros
        * Fast development of test cases
+       * Huge boiler plate codes can be automatically generated
    * Cons 
        * Tightly coupled to Mockito testing framework
        * Higher learning curve on Mockito API usage
