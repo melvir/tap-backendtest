@@ -45,7 +45,7 @@ public class EmployeeController {
         return new ResponseEntity<>(employeeList, HttpStatus.OK);
     }
 
-    @PutMapping(value = "/update/{id}")
+    @PutMapping(value = "/{id}")
     public ResponseEntity<?> updateEmployee(@RequestBody Employee employee, @PathVariable long id){
     	Optional<Employee> employeeOptional = employeeService.getEmployee(id);
         log.info("Received request to update employee with id = " + id);
@@ -91,7 +91,7 @@ public class EmployeeController {
                 .body("Successfully created new Employee : " + newEmployee);
     }
 
-    @GetMapping(value = "/retrieve_employee/{id}")
+    @GetMapping(value = "/{id}")
     public ResponseEntity<String> retrieveEmployee(@PathVariable long id) throws Exception {
 
         log.info("Received request to retrieve employee with user id = ");

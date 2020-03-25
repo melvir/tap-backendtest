@@ -99,41 +99,47 @@ public class TestEmployeeRestController {
     }
 
     @Test
-    public void whenUpdateEmployee_GivenId_ShouldReturnEmployee() {
+    public void whenUpdateEmployeeName_GivenId_ShouldReturnEmployee() {
 
         //arrange
-        Employee employee = new Employee("Mel", "department");
-        employee.setName("Mel 1");
-        Employee saved = employeeRepository.save(employee);
+        String name = "John";
+        String newName = "Mary";
+        Employee employee = new Employee(name, "department");
+        Employee updatedEmployee = employeeRepository.save(employee);
+
+        updatedEmployee.setName(newName);
 
         //act
-        final String apiUrl = "http://localhost:" + port + "/api/v1/employees/update/" + saved.getId();
-
-        Response response = given()
+        final String apiUrl = "http://localhost:" + port + "/api/v1/employees/{id}";
+        JsonPath jsonPath = given()
+                .pathParam("id", updatedEmployee.getId())
                 .when()
-                .contentType(ContentType.JSON)
-                .body(employee)
-                .put(apiUrl);
+                .put(apiUrl)
+                .then()
+                .statusCode(200)
+                .extract().body().jsonPath();
 
-        int statusCode = response.getStatusCode();
         //assert
-        assertThat(statusCode).isEqualTo(200);
+        Employee e = jsonPath.get();
+        assertThat(e).isEqualToIgnoringGivenFields(updatedEmployee, "createdDateTime", "modifiedDateTime"); //check return contains the object
     }
 
     @Test
     public void whenGetEmployeeByDepartment_GivenDepartment_ShouldReturnEmployee() {
 
         //arrange
-        Employee employee = new Employee("John", "ITA");
+        String department = "ITA";
+        Employee employee = new Employee("John", department);
         employeeRepository.save(employee);
 
         //act
-        final String apiUrl = "http://localhost:" + port + "/api/v1/employees?department=ITA";
+        final String apiUrl = "http://localhost:" + port + "/api/v1/employees";
 
         //Response response = given().get(apiUrl);
         //ResponseBody body = response.getBody();
 
         JsonPath jsonPath = RestAssured.given()
+                .param("department", department)
                 .when()
                 .get(apiUrl)
                 .then()
@@ -146,9 +152,5 @@ public class TestEmployeeRestController {
         assertThat(employeeList).contains(employee); //check return contains the object
     }
 
-    @After
-    public void tearDown() {
-        employeeRepository.deleteAll();
-    }
 
 }
