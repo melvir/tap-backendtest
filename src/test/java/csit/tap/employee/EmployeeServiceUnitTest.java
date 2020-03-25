@@ -65,29 +65,6 @@ public class EmployeeServiceUnitTest {
     }
 
     @Test
-    public void whenFindAllEmployees_ShouldReturnAllEmployees() throws Exception
-    {
-
-        //arrange
-        List<Employee> employeeList = new ArrayList<>();
-
-        for (int i = 0; i < 10; i++) {
-            Employee employee = new Employee("Mary " + i, "Department" + i);
-            employeeList.add(employee);
-        }
-
-        employeeRepository.setEmployeeList(employeeList);
-
-        //act
-        Page<Employee> employeePage = employeeService.findAll(0, 5, "id");
-        assertThat(employeePage.getContent()).usingRecursiveFieldByFieldElementComparator().isEqualTo(employeeList.subList(0, 5));
-
-        //assert
-        assertThat(employeePage.getTotalElements()).isEqualTo(5);
-
-    }
-
-    @Test
     public void whenUpdateEmployee_givenEmptyName_shouldThrowInvalidDataException() {
         //arrange
         Employee existingEmployee = new Employee("John", "Department");
@@ -103,26 +80,6 @@ public class EmployeeServiceUnitTest {
         //act
         employeeService.updateEmployee(1L,existingEmployee);
 
-    }
-
-    @Test
-    public void whenGetEmployee_givenDepartment_shouldReturnEmployee() {
-
-        //arrange
-        List<Employee> employeeList = new ArrayList<>();
-        Employee employee = new Employee("John", "ITA");
-        employeeList.add(employee);
-
-        Pageable paging = PageRequest.of(0, 10, Sort.by("id"));
-        Page<Employee> employeePage = new PageImpl<>(employeeList);
-
-        employeeRepository.setEmployeePage(employeePage);
-
-        //act
-        Page<Employee> resultEmployee = employeeService.findByDepartment(0, 10, "id", "ITA");
-
-        //assert
-        assertThat(resultEmployee.getContent()).contains(employee);
     }
 
     @Test
@@ -171,4 +128,80 @@ public class EmployeeServiceUnitTest {
         ).isInstanceOf(javax.persistence.EntityNotFoundException.class).hasMessage("id - 20");
 
     }
+
+//Region: Find Methods
+    @Test
+    public void whenGetEmployee_givenDepartment_shouldReturnEmployee() {
+
+        //arrange
+        List<Employee> employeeList = new ArrayList<>();
+        Employee employee = new Employee("John", "ITA");
+        employeeList.add(employee);
+
+        Pageable paging = PageRequest.of(0, 10, Sort.by("id"));
+        Page<Employee> employeePage = new PageImpl<>(employeeList);
+
+        employeeRepository.setEmployeePage(employeePage);
+
+        //act
+        Page<Employee> resultEmployee = employeeService.findByDepartment(0, 10, "id", "ITA");
+
+        //assert
+        assertThat(resultEmployee.getContent()).contains(employee);
+    }
+
+    @Test
+    public void whenFindAllEmployees_ShouldReturnAllEmployees() throws Exception
+    {
+
+        //arrange
+        List<Employee> employeeList = new ArrayList<>();
+
+        for (int i = 0; i < 10; i++) {
+            Employee employee = new Employee("Mary " + i, "Department" + i);
+            employeeList.add(employee);
+        }
+
+        employeeRepository.setEmployeeList(employeeList);
+
+        //act
+        Page<Employee> employeePage = employeeService.findAll(0, 5, "id");
+        assertThat(employeePage.getContent()).usingRecursiveFieldByFieldElementComparator().isEqualTo(employeeList.subList(0, 5));
+
+        //assert
+        assertThat(employeePage.getTotalElements()).isEqualTo(5);
+
+    }
+
+    @Test
+    public void whenFindEmployee_GivenNameAndDepartment_ShouldReturnEmployee() {
+        //arrange
+        String name = "John";
+        String nameToSearch = name + "3";
+        String department = "Department ";
+        String departmentToSearch = department + "3";
+
+
+        List<Employee> employeeList = new ArrayList<>();
+        //simulate data accuracy
+        for (int i = 0; i < 10; i++) {
+            for (int j = 0; j < 5; j++) {
+                Employee employee = new Employee(name + i, "Department " + j);
+                employeeList.add(employee);
+            }
+        }
+
+        employeeRepository.setEmployeePage(new PageImpl<>(employeeList));
+
+        Employee expectedEmployee = new Employee(nameToSearch, departmentToSearch);
+
+        //act
+        Pageable paging = PageRequest.of(0, 5, Sort.by("id"));
+        Page<Employee> resultEmployee = employeeRepository.findByNameAndDepartment(nameToSearch, departmentToSearch, paging);
+
+        //assert
+        assertThat(resultEmployee.getContent()).usingElementComparatorIgnoringFields("id", "createdDateTime", "modifiedDateTime").contains(expectedEmployee);
+    }
+
+    //endregion
 }

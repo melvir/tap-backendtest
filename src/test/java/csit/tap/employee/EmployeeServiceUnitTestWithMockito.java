@@ -31,35 +31,22 @@ public class EmployeeServiceUnitTestWithMockito {
     @Before
     public void setup() {
         Employee newEmployee = new Employee("Alex", "ITA");
-
-        //Mockito.doReturn(employeeRepository.findAll()).;
     }
 
     @Test
     public void whenSaveEmployee_givenEmployee_shouldReturnEmployee(){
         //arrange
-        Employee employeeToSave = new Employee("Mary", "CST", LocalDateTime.now());
+        Employee employeeToSave = new Employee("Mary", "CST");
 
         //act
         Employee newEmployee = employeeService.createEmployee(employeeToSave);
-
-        //assert
-        assertThat(newEmployee).isNotNull().isEqualTo(employeeToSave);
-    }
-
-    @Test
-    public void whenSaveEmployee_givenEmployee_shouldSaveEmployee(){
-        //arrange
-        Employee employeeToSave = new Employee("Mary", "CST", LocalDateTime.now());
-
-        //act
-        Employee newEmployee = employeeService.createEmployee(employeeToSave);
+        when(employeeRepository.save(newEmployee)).thenReturn(newEmployee);
 
         //assert
         verify(employeeRepository, times(1)).save(any());
-//        assertThat(employeeRepository.verify("save", 1)).isTrue();
-        assertThat(newEmployee).isNotNull().isEqualTo(employeeToSave);
+        assertThat(newEmployee).isEqualToIgnoringGivenFields( employeeToSave,"id","createdDateTime", "modifiedDateTime");
     }
+
     @Test
     public void whenFindAllEmployees_ShouldReturnAllEmployees() throws Exception
     {
@@ -77,10 +64,9 @@ public class EmployeeServiceUnitTestWithMockito {
         //act
         Page<Employee> employeePage = employeeService.findAll(0, 5, "id");
 
-        assertThat(employeePage.getContent()).usingRecursiveFieldByFieldElementComparator().isEqualTo(employeeList.subList(0, 5));
-
         //assert
-
+        verify(employeeRepository, times(1)).findAll(pageable);
+        assertThat(employeePage.getContent()).usingRecursiveFieldByFieldElementComparator().isEqualTo(employeeList.subList(0, 5));
         assertThat(employeePage.getTotalElements()).isEqualTo(5);
     }
 }
