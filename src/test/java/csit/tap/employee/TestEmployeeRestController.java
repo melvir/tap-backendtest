@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import csit.tap.employee.entities.Employee;
 import csit.tap.employee.repositories.EmployeeRepository;
 import io.restassured.RestAssured;
+import io.restassured.http.ContentType;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import io.restassured.response.ResponseBody;
@@ -109,7 +110,10 @@ public class TestEmployeeRestController {
         //act
         final String apiUrl = "http://localhost:" + port + "/api/v1/employees/update/1";
 
-        Response response = given().when().body(employee)
+        Response response = given()
+                .when()
+                .contentType(ContentType.JSON)
+                .body(employee)
                 .put(apiUrl);
 
         //assert
