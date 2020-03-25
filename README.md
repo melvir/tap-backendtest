@@ -82,65 +82,63 @@ The example applicationn shows different test layers according to the [Test Pyra
        * Dont need to keep up to date with Mokito standard
    * Cons
        * More coding effort 
-```
-@RunWith(JUnit4.class)
-public class EmployeeServiceUnitTest {
 
-    private EmployeeRepositoryMock employeeRepository = new EmployeeRepositoryMock();
-    private EmployeeService employeeService = new EmployeeService(employeeRepository);
+  Example:
+  ```
+  @RunWith(JUnit4.class)
+  public class EmployeeServiceUnitTest {
 
-    @Rule
-    public ExpectedException thrown = ExpectedException.none();
+      private EmployeeRepositoryMock employeeRepository = new EmployeeRepositoryMock();
+      private EmployeeService employeeService = new EmployeeService(employeeRepository);
 
-    @Before
-    public void setup() {
-        Employee newEmployee = new Employee("Alex", "III");
-    }
+      @Rule
+      public ExpectedException thrown = ExpectedException.none();
+
+      @Before
+      public void setup() {
+          Employee newEmployee = new Employee("Alex", "III");
+      }
     
-    @Test
-    public void whenSaveEmployee_givenEmployee_shouldReturnEmployee(){
-        //arrange
-        Employee employeeToSave = new Employee("Mary", "TTT", LocalDateTime.now());
+      @Test
+      public void whenSaveEmployee_givenEmployee_shouldReturnEmployee(){
+          //arrange
+          Employee employeeToSave = new Employee("Mary", "TTT", LocalDateTime.now());
 
-        //act
-        Employee newEmployee = employeeService.createEmployee(employeeToSave);
+          //act
+          Employee newEmployee = employeeService.createEmployee(employeeToSave);
 
-        //assert
-        assertThat(newEmployee).isNotNull().isEqualTo(employeeToSave);
-    }
-}
-```
-```
-public class EmployeeRepositoryMock implements EmployeeRepository {
-    private int saveCalledTimes;
+          //assert
+          assertThat(newEmployee).isNotNull().isEqualTo(employeeToSave);
+      }
+  }
+  ```
+  ```
+  public class EmployeeRepositoryMock implements EmployeeRepository {
+      private int saveCalledTimes;
+      private List<Employee> employeeList;
+      private Page<Employee> employeePage;
 
-    private List<Employee> employeeList;
+      public boolean verify(String methodName, int wasCalled){
+          if(methodName.equalsIgnoreCase("save"))
+              return wasCalled == saveCalledTimes;
+          return false;
+      } 
+      .
+      .
+      .      
+      @Override
+      public Page<Employee> findAll(Pageable pageable) {
+          return new PageImpl<Employee>(employeeList.subList(pageable.getPageNumber(), pageable.getPageSize()), pageable,         pageable.getPageSize());
+      }
 
-    private Page<Employee> employeePage;
+      @Override
+      public <S extends Employee> S save(S s) {
+          saveCalledTimes++;
+          return null;
+      } 
+  }
 
-    public boolean verify(String methodName, int wasCalled){
-        if(methodName.equalsIgnoreCase("save"))
-            return wasCalled == saveCalledTimes;
-        return false;
-    } 
-    .
-    .
-    .
-     @Override
-
-    public Page<Employee> findAll(Pageable pageable) {
-        return new PageImpl<Employee>(employeeList.subList(pageable.getPageNumber(), pageable.getPageSize()), pageable,       pageable.getPageSize());
-    }
-
-    @Override
-    public <S extends Employee> S save(S s) {
-        saveCalledTimes++;
-        return null;
-    }
-  
-}
-
-```
+  ```
 
 * Using Mockito
    * Pros
@@ -151,36 +149,38 @@ public class EmployeeRepositoryMock implements EmployeeRepository {
    * Cons 
        * Tightly coupled to Mockito testing framework
        * Higher learning curve on Mockito API usage
-```
-@RunWith(MockitoJUnitRunner.class)
-public class EmployeeServiceUnitTestWithMockito {
+       
+  Example:
+  ```
+  @RunWith(MockitoJUnitRunner.class)
+  public class EmployeeServiceUnitTestWithMockito {
 
-    @Mock
-    private EmployeeRepository employeeRepository;
+      @Mock
+      private EmployeeRepository employeeRepository;
 
-    @InjectMocks
-    private EmployeeService employeeService;
+      @InjectMocks
+      private EmployeeService employeeService;
 
-    @Before
-    public void setup() {
-        Employee newEmployee = new Employee("Alex", "III");
-    }
+      @Before
+      public void setup() {
+          Employee newEmployee = new Employee("Alex", "III");
+      }
 
-    @Test
-    public void whenSaveEmployee_givenEmployee_shouldReturnEmployee(){
-        //arrange
-        Employee employeeToSave = new Employee("Mary", "TTT");
+      @Test
+      public void whenSaveEmployee_givenEmployee_shouldReturnEmployee(){
+          //arrange
+          Employee employeeToSave = new Employee("Mary", "TTT");
 
-        //act
-        Employee newEmployee = employeeService.createEmployee(employeeToSave);
-        when(employeeRepository.save(newEmployee)).thenReturn(newEmployee);
+          //act
+          Employee newEmployee = employeeService.createEmployee(employeeToSave);
+          when(employeeRepository.save(newEmployee)).thenReturn(newEmployee);
 
-        //assert
-        verify(employeeRepository, times(1)).save(any());
-        assertThat(newEmployee).isEqualToIgnoringGivenFields( employeeToSave,"id","createdDateTime", "modifiedDateTime");
-    }
-}
-```
+          //assert
+          verify(employeeRepository, times(1)).save(any());
+          assertThat(newEmployee).isEqualToIgnoringGivenFields( employeeToSave,"id","createdDateTime", "modifiedDateTime");
+      }
+  }
+  ```
 
 ## Techniques
 * Use rest-assured to test specific JSON response by specifying the path.
