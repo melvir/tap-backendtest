@@ -21,14 +21,14 @@ The example applicationn shows different test layers according to the [Test Pyra
 ## Application Architecture
 ```
  ╭┄┄┄┄┄┄┄╮      ┌──────────┐      ┌──────────┐
- ┆   ☁  ┆  ←→  │    ☕   │  ←→  │    💾    │
+ ┆   ☁   ┆  ←→  │    ☕     │  ←→  │    💾     │
  ┆  Web  ┆ HTTP │  Spring  │      │ Database │
  ╰┄┄┄┄┄┄┄╯      │  Service │      └──────────┘
                 └──────────┘
                      ↑ JSON/HTTP
                      ↓
                 ┌──────────┐
-                │    ☁    │
+                │    ☁     │
                 │ Weather  │
                 │   API    │
                 └──────────┘
@@ -70,30 +70,52 @@ The example applicationn shows different test layers according to the [Test Pyra
 * Test the input and output 
 
 ## Mocking
-* Create your own Java mock classes
+* Create your own java mock classes
    * Pros
        * Easy readabiliy
-       * Just have to reuse your existing Java skills
+       * Low learning curve
        * Dont need to keep up to date with Mokito standard
    * Cons
        * More coding effort 
 * Using Mockito
    * Pros
        * Fast development of test cases
-       * Huge boiler plate codes can be automatically generated 
    * Cons 
        * Tightly coupled to Mockito testing framework
        * Higher learning curve on Mockito API usage
 
 ## Techniques
 * Use rest-assured to test specific JSON response by specifying the path.
+(1) Rest-assured can be used to deserialize a result directly to a POJO model:
+```
+        Employee e = given()
+                .contentType(ContentType.JSON)
+                .body(json)
+                .pathParam("id", updatedEmployee.getId())
+                .when()
+                .put(apiUrl)
+                .then()
+                .statusCode(HttpStatus.OK.value())
+                .extract()
+                .as(Employee.class);
+```
+(2) Rest-assured can also be used to search through a list of objects within a json list:
+```
+        JsonPath jsonPath = RestAssured.given()
+                .param("department", department)
+                .when()
+                .get(apiUrl)
+                .then()
+                .statusCode(200)
+                .extract().body().jsonPath();
 
+        List<Employee> employeeList = jsonPath.getList("content", Employee.class);
+```
 ## List of guides
 * Web Layer test : https://spring.io/guides/gs/testing-web/
 
 ## Environment Setup
 * IDE : Intelli J
-    * Install Lombok plugin under Settings > MarketPlace.    
+    * Lombok will be loaded automatically.
 * IDE : Eclipse
     * You will need to install the lombok plugin manually into the Eclipse by double clicking on the lombok.jar and point to the eclipse.exe path. Restart your IDE and rebuild your project for the installation to take effect. 
-    * lombok.jar can be downloaded from https://projectlombok.org/download
