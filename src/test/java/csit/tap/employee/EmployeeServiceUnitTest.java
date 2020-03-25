@@ -90,7 +90,7 @@ public class EmployeeServiceUnitTest {
     @Test
     public void whenUpdateEmployee_givenEmptyName_shouldThrowInvalidDataException() {
         //arrange
-        Employee existingEmployee = new Employee("Melvir", "Depart M");
+        Employee existingEmployee = new Employee("John", "Department");
         existingEmployee.setId(1L);
         employeeRepository.setEmployeeList(Arrays.asList(existingEmployee));
 
