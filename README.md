@@ -129,6 +129,6 @@ The example applicationn shows different test layers according to the [Test Pyra
   * Install Lombok plugin under Settings > MarketPlace.    
 * Eclipse
   * You will need to install the lombok plugin manually into the Eclipse by double clicking on the **lombok.jar** and go through the installation steps presented. Restart your IDE and rebuild your project for the installation to take effect. In your Java project, you will need to maunually include **lombok.jar** into your project build path.
-  * Downloaded **lombok.jar** from https://projectlombok.org/download
+  * Download **lombok.jar** from https://projectlombok.org/download
 * Others
   * Don't use other IDEs.
