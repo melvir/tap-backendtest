@@ -28,17 +28,52 @@ public class EmployeeRepositoryTest {
     public void getEmployee_givenName_shouldReturnEmployee() {
 
         //arrange
+        String name = "John";
+        String nameToSearch = name + "3";
+
         for (int i = 0; i < 10; i++) {
-            Employee employee = new Employee("Mel" + i, "Department " + i);
+            Employee employee = new Employee(name + i, "Department " + i);
             employeeRepository.save(employee);
         }
 
+        Employee expectedEmployee = new Employee(nameToSearch, "Department 3");
+        expectedEmployee.setId(4L);
+
         //act
-        Employee resultEmployee = employeeRepository.findByName("Mel3");
+        Pageable paging = PageRequest.of(0, 5, Sort.by("id"));
+        Page<Employee> resultEmployee = employeeRepository.findByName(nameToSearch, paging);
 
         //assert
-        assertThat(resultEmployee.getName()).isEqualTo("Mel3");
+        assertThat(resultEmployee.getContent()).usingElementComparatorIgnoringFields("createdDateTime", "modifiedDateTime").contains(expectedEmployee);
     }
+
+    @Test
+    public void getEmployee_givenNameAndDepartment_shouldReturnEmployee() {
+
+        //arrange
+        String name = "John";
+        String nameToSearch = name + "3";
+        String department = "Department ";
+        String departmentToSearch = department + "3";
+
+            //simulate data accuracy
+        for (int i = 0; i < 10; i++) {
+            for (int j = 0; j < 5; j++) {
+                Employee employee = new Employee(name + i, "Department " + j);
+                employeeRepository.save(employee);
+            }
+        }
+
+        Employee expectedEmployee = new Employee(nameToSearch, departmentToSearch);
+
+        //act
+        Pageable paging = PageRequest.of(0, 5, Sort.by("id"));
+        Page<Employee> resultEmployee = employeeRepository.findByNameAndDepartment(nameToSearch, departmentToSearch, paging);
+
+        //assert
+        assertThat(resultEmployee.getContent()).usingElementComparatorIgnoringFields("id", "createdDateTime", "modifiedDateTime").contains(expectedEmployee);
+    }
+
 
     @Test
     public void getEmployee_givenId_shouldReturnEmployee() {
