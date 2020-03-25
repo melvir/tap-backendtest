@@ -90,6 +90,7 @@ The example applicationn shows different test layers according to the [Test Pyra
 
 ## Techniques
 * Use rest-assured to test specific JSON response by specifying the path.
+
 (1) Rest-assured can be used to deserialize a result directly to a POJO model:
 ```
         Employee e = given()
