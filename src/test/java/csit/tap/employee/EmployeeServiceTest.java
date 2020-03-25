@@ -22,7 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @RunWith(JUnit4.class)
-public class EmployeeServiceUnitTest {
+public class EmployeeServiceTest {
 
     private EmployeeRepositoryMock employeeRepository = new EmployeeRepositoryMock();
 
