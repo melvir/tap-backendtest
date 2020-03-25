@@ -82,7 +82,7 @@ The example applicationn shows different test layers according to the [Test Pyra
        * Dont need to keep up to date with Mokito standard
        * Ease of maintainance of test because mock methods and result is centralized in mock objects  
    * Cons
-       * More coding effort 
+       * More coding effort        
 ```
 @RunWith(JUnit4.class)
 public class EmployeeServiceUnitTest {
@@ -95,19 +95,52 @@ public class EmployeeServiceUnitTest {
 
     @Before
     public void setup() {
-        Employee newEmployee = new Employee("Alex", "ITA");
+        Employee newEmployee = new Employee("Alex", "III");
     }
     
     @Test
     public void whenSaveEmployee_givenEmployee_shouldReturnEmployee(){
         //arrange
-        Employee employeeToSave = new Employee("Mary", "CST", LocalDateTime.now());
+        Employee employeeToSave = new Employee("Mary", "AAA", LocalDateTime.now());
 
         //act
         Employee newEmployee = employeeService.createEmployee(employeeToSave);
 
         //assert
         assertThat(newEmployee).isNotNull().isEqualTo(employeeToSave);
+    }
+}
+```
+```
+public class EmployeeRepositoryMock implements EmployeeRepository {
+    private int saveCalledTimes;
+
+    private List<Employee> employeeList;
+
+    private Page<Employee> employeePage;
+
+    public boolean verify(String methodName, int wasCalled){
+        if(methodName.equalsIgnoreCase("save"))
+            return wasCalled == saveCalledTimes;
+        return false;
+    }
+    .
+    .
+    @Override
+
+    public Page<Employee> findAll(Pageable pageable) {
+        return new PageImpl<Employee>(employeeList.subList(pageable.getPageNumber(), pageable.getPageSize()), pageable, pageable.getPageSize());
+    }
+
+    @Override
+    public <S extends Employee> S save(S s) {
+        saveCalledTimes++;
+        return null;
+    }
+
+    @Override
+    public <S extends Employee> Iterable<S> saveAll(Iterable<S> iterable) {
+        return null;
     }
 }
 ```
@@ -134,13 +167,13 @@ public class EmployeeServiceUnitTestWithMockito {
 
     @Before
     public void setup() {
-        Employee newEmployee = new Employee("Alex", "ITA");
+        Employee newEmployee = new Employee("Alex", "III");
     }
 
     @Test
     public void whenSaveEmployee_givenEmployee_shouldReturnEmployee(){
         //arrange
-        Employee employeeToSave = new Employee("Mary", "CST");
+        Employee employeeToSave = new Employee("Mary", "AAA");
 
         //act
         Employee newEmployee = employeeService.createEmployee(employeeToSave);
