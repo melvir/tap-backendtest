@@ -55,7 +55,7 @@ public class EmployeeServiceUnitTest {
     @Test
     public void whenSaveEmployee_givenEmployee_shouldSaveEmployee(){
         //arrange
-        Employee employeeToSave = new Employee("Mary", "CST", LocalDateTime.now());
+        Employee employeeToSave = new Employee("Mary", "CST");
 
         //act
         Employee newEmployee = employeeService.createEmployee(employeeToSave);
@@ -63,7 +63,7 @@ public class EmployeeServiceUnitTest {
         //assert
 //        verify(employeeRepository, times(1)).save(any());
         assertThat(employeeRepository.verify("save", 1)).isTrue();
-        assertThat(newEmployee).isNotNull().isEqualTo(employeeToSave);
+        assertThat(newEmployee).isNotNull().isEqualToIgnoringGivenFields(employeeToSave, "createdDateTime", "modifiedDateTime");
     }
 
     @Test
