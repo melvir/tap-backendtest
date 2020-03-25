@@ -83,6 +83,34 @@ The example applicationn shows different test layers according to the [Test Pyra
        * Dont need to keep up to date with Mokito standard
    * Cons
        * More coding effort 
+```
+@RunWith(JUnit4.class)
+public class EmployeeServiceUnitTest {
+
+    private EmployeeRepositoryMock employeeRepository = new EmployeeRepositoryMock();
+    private EmployeeService employeeService = new EmployeeService(employeeRepository);
+
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
+
+    @Before
+    public void setup() {
+        Employee newEmployee = new Employee("Alex", "ITA");
+    }
+    
+    @Test
+    public void whenSaveEmployee_givenEmployee_shouldReturnEmployee(){
+        //arrange
+        Employee employeeToSave = new Employee("Mary", "CST", LocalDateTime.now());
+
+        //act
+        Employee newEmployee = employeeService.createEmployee(employeeToSave);
+
+        //assert
+        assertThat(newEmployee).isNotNull().isEqualTo(employeeToSave);
+    }
+}
+```
 * Using Mockito
    * Pros
        * Fast development of test cases
@@ -92,6 +120,36 @@ The example applicationn shows different test layers according to the [Test Pyra
    * Cons 
        * Tightly coupled to Mockito testing framework
        * Higher learning curve on Mockito API usage
+```
+@RunWith(MockitoJUnitRunner.class)
+public class EmployeeServiceUnitTestWithMockito {
+
+    @Mock
+    private EmployeeRepository employeeRepository;
+
+    @InjectMocks
+    private EmployeeService employeeService;
+
+    @Before
+    public void setup() {
+        Employee newEmployee = new Employee("Alex", "ITA");
+    }
+
+    @Test
+    public void whenSaveEmployee_givenEmployee_shouldReturnEmployee(){
+        //arrange
+        Employee employeeToSave = new Employee("Mary", "CST");
+
+        //act
+        Employee newEmployee = employeeService.createEmployee(employeeToSave);
+        when(employeeRepository.save(newEmployee)).thenReturn(newEmployee);
+
+        //assert
+        verify(employeeRepository, times(1)).save(any());
+        assertThat(newEmployee).isEqualToIgnoringGivenFields( employeeToSave,"id","createdDateTime", "modifiedDateTime");
+    }
+}
+```
 
 ## Techniques
 * Use rest-assured to test specific JSON response by specifying the path.
