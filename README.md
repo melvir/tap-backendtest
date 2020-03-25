@@ -80,7 +80,9 @@ The example applicationn shows different test layers according to the [Test Pyra
 * Using Mockito
    * Pros
        * Fast development of test cases
-       * Huge boiler plate codes can be automatically generated 
+       * Huge boiler plate codes can be automatically generated
+       * Can verify object behavior closely
+            * see `whenSaveEmployee_givenEmployee_shouldSaveEmployee` in `EmployeeServiceUnitTestWithMockito.class`
    * Cons 
        * Tightly coupled to Mockito testing framework
        * Higher learning curve on Mockito API usage
