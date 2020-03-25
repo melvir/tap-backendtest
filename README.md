@@ -109,7 +109,38 @@ public class EmployeeServiceUnitTest {
         assertThat(newEmployee).isNotNull().isEqualTo(employeeToSave);
     }
 }
+
+public class EmployeeRepositoryMock implements EmployeeRepository {
+    private int saveCalledTimes;
+
+    private List<Employee> employeeList;
+
+    private Page<Employee> employeePage;
+
+    public boolean verify(String methodName, int wasCalled){
+        if(methodName.equalsIgnoreCase("save"))
+            return wasCalled == saveCalledTimes;
+        return false;
+    } 
+    .
+    .
+    .
+     @Override
+
+    public Page<Employee> findAll(Pageable pageable) {
+        return new PageImpl<Employee>(employeeList.subList(pageable.getPageNumber(), pageable.getPageSize()), pageable,       pageable.getPageSize());
+    }
+
+    @Override
+    public <S extends Employee> S save(S s) {
+        saveCalledTimes++;
+        return null;
+    }
+  
+}
+
 ```
+
 * Using Mockito
    * Pros
        * Fast development of test cases
