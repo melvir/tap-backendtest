@@ -45,6 +45,11 @@ The example applicationn shows different test layers according to the [Test Pyra
 * Lesser help desk call
 * Software developers become happier
 
+## Testing Pattern
+* Adopt the Arrange, Act, Assert model
+* Arrange describes whatever setup is needed (eg. initializing a set of sample employees)
+* Act describes the subject's behavior that's under test (and typically only describes a single line needed to invoke that behavior) (eg. saving to store)
+* Assert describes the verification that the subject's behavior had the desired effect by evaluating its return value (eg. asserting response match to a sample employee prepared earlier)
 
 ## What to test & why test / Minimal Code coverage
 * API
