@@ -67,8 +67,8 @@ The example applicationn shows different test layers according to the [Test Pyra
   * Do not test
 
 ## Do's and Don't's
-* Do not test the parameter 
-* Test the input and output 
+* Do not test the parameter
+* Test the input and output
 
 ## Mocking
 * Create your own Java mock classes
@@ -120,8 +120,10 @@ The example applicationn shows different test layers according to the [Test Pyra
 * Web Layer test : https://spring.io/guides/gs/testing-web/
 
 ## Environment Setup
-* IDE : Intelli J
-    * Install Lombok plugin under Settings > MarketPlace.    
-* IDE : Eclipse
-    * You will need to install the lombok plugin manually into the Eclipse by double clicking on the lombok.jar and go through the installation steps presented. Restart your IDE and rebuild your project for the installation to take effect. In your Java project, you will need to maunually include lombok.jar into your project build path.
-    * Downloaded lombok.jar from https://projectlombok.org/download
+* Intelli J
+  * Install Lombok plugin under Settings > MarketPlace.    
+* Eclipse
+  * You will need to install the lombok plugin manually into the Eclipse by double clicking on the lombok.jar and go through the installation steps presented. Restart your IDE and rebuild your project for the installation to take effect. In your Java project, you will need to maunually include lombok.jar into your project build path.
+  * Downloaded lombok.jar from https://projectlombok.org/download
+* Others
+  * Don't use other IDEs.
