@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
@@ -98,32 +99,44 @@ public class TestEmployeeRestController {
                 statusCode(200);
     }
 
+    /**
+     * To test for updating a specific Object only (Employee.class)
+     * @throws JsonProcessingException when cannot parse the json as a request parameter
+     */
     @Test
-    public void whenUpdateEmployeeName_GivenId_ShouldReturnEmployee() {
+    public void whenUpdateEmployeeName_GivenId_ShouldReturnEmployee() throws JsonProcessingException {
 
         //arrange
         String name = "John";
         String newName = "Mary";
         Employee employee = new Employee(name, "department");
         Employee updatedEmployee = employeeRepository.save(employee);
-
         updatedEmployee.setName(newName);
+
+        String json = objectMapper.writeValueAsString(updatedEmployee);
 
         //act
         final String apiUrl = "http://localhost:" + port + "/api/v1/employees/{id}";
-        JsonPath jsonPath = given()
+        Employee e = given()
+                .contentType(ContentType.JSON)
+                .body(json)
                 .pathParam("id", updatedEmployee.getId())
                 .when()
                 .put(apiUrl)
                 .then()
-                .statusCode(200)
-                .extract().body().jsonPath();
+                .statusCode(HttpStatus.OK.value())
+                .extract()
+                .as(Employee.class);
 
         //assert
-        Employee e = jsonPath.get();
+
         assertThat(e).isEqualToIgnoringGivenFields(updatedEmployee, "createdDateTime", "modifiedDateTime"); //check return contains the object
     }
 
+
+    /**
+     * To test for data in the pagination response for a list of employees
+     */
     @Test
     public void whenGetEmployeeByDepartment_GivenDepartment_ShouldReturnEmployee() {
 
