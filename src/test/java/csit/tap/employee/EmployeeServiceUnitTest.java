@@ -4,7 +4,6 @@ import csit.tap.employee.entities.Employee;
 import csit.tap.employee.exception.InvalidDataEntry;
 import csit.tap.employee.mocks.EmployeeRepositoryMock;
 import csit.tap.employee.services.EmployeeService;
-import org.assertj.core.api.ThrowableAssert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -13,7 +12,6 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 import org.springframework.data.domain.*;
 
-import javax.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -121,7 +119,7 @@ public class EmployeeServiceUnitTest {
         employeeRepository.setEmployeePage(employeePage);
 
         //act
-        Page<Employee> resultEmployee = employeeService.findEmployeeByDepartment(0, 10, "id", "ITA");
+        Page<Employee> resultEmployee = employeeService.findByDepartment(0, 10, "id", "ITA");
 
         //assert
         assertThat(resultEmployee.getContent()).contains(employee);

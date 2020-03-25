@@ -82,21 +82,28 @@ public class TestEmployeeRestController {
     public void whenGetEmployeeByName_GivenName_ShouldReturnEmployee() {
 
         //arrange
-
-        List<Employee> employeeList = new ArrayList<>();
-
+        String name = "alex";
+        String nameToSearch = name + "2";
         for (int i = 0; i < 10; i++) {
-            Employee employee = new Employee("alex" + i, "department " + i);
-            employee = employeeRepository.save(employee);
-            employeeList.add(employee);
+            Employee employee = new Employee(name + i, "department " + i);
+            employeeRepository.save(employee);
         }
+        Employee e = employeeRepository.findByName(nameToSearch);
 
         //act
-        final String apiUrl = "http://localhost:" + port + "/api/v1/employees?name=alex 2";
-        given()
+        final String apiUrl = "http://localhost:" + port + "/api/v1/employees";
+        JsonPath jsonPath = RestAssured.given()
+                .queryParam("name", nameToSearch)
+                .when()
                 .get(apiUrl)
-                .then().
-                statusCode(200);
+                .then()
+                .statusCode(200)
+                .extract().body().jsonPath();
+
+        List<Employee> employeeList = jsonPath.getList("content", Employee.class);
+
+        //assert
+        assertThat(employeeList).containsOnly(e);
     }
 
     /**

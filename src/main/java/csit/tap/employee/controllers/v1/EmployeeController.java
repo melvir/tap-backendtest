@@ -10,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 import java.util.Optional;
 
 
@@ -24,44 +23,51 @@ public class EmployeeController {
     private EmployeeService employeeService;
 
     @GetMapping
-    public ResponseEntity<?> retrieveAllEmployees(HttpServletRequest request,
-                         @RequestParam(defaultValue =  "0") Integer pageNo,
-                         @RequestParam(defaultValue =  "5") Integer pageSize,
-                         @RequestParam(defaultValue =  "id") String sortBy,
-                         @RequestParam(required = false) String department) throws Exception {
+    public Page<Employee> retrieveAllEmployees(HttpServletRequest request,
+                                                  @RequestParam(defaultValue =  "0") Integer pageNo,
+                                                  @RequestParam(defaultValue =  "5") Integer pageSize,
+                                                  @RequestParam(defaultValue =  "id") String sortBy,
+                                                  @RequestParam(required = false) String name,
+                                                  @RequestParam(required = false) String department) {
 
         log.info("Received request for all employees from user id = ");
 
-        Page<Employee> employeeList;
+        Boolean hasName = name != null && !name.isEmpty();
+        Boolean hasDepartment = department != null && !department.isEmpty();
 
-        if (department == null) {
-            employeeList = employeeService.findAll(pageNo, pageSize, sortBy);
-            log.info(employeeList.getContent().toString());
+
+        if (hasName && hasDepartment){
+            return employeeService.findByNameAndDepartment(pageNo, pageSize, sortBy, name, department);
         }
-        else{
-            employeeList = employeeService.findEmployeeByDepartment(pageNo, pageSize, sortBy, department);
+        else if (hasName){
+            return employeeService.findByName(pageNo, pageSize, sortBy, name);
+        }
+        else if (hasDepartment){
+            return employeeService.findByDepartment(pageNo, pageSize, sortBy, department);
+        }
+        else {
+            return employeeService.findAll(pageNo, pageSize, sortBy);
         }
 
-        return new ResponseEntity<>(employeeList, HttpStatus.OK);
     }
 
     @PutMapping(value = "/{id}")
     public ResponseEntity<?> updateEmployee(@RequestBody Employee employee, @PathVariable long id){
-    	Optional<Employee> employeeOptional = employeeService.getEmployee(id);
+        Optional<Employee> employeeOptional = employeeService.getEmployee(id);
         log.info("Received request to update employee with id = " + id);
 
         if (employeeOptional.isPresent()){
             //Only able to update employee if the employee exist
-        	employeeService.updateEmployee(id, employee);
+            employeeService.updateEmployee(id, employee);
             String msg = String.format("Employee with id = %d is updated", id);
             log.info(msg);
             return new ResponseEntity<>(employee, HttpStatus.OK);
         }
-        else {     
+        else {
             return ResponseEntity.notFound().build();
         }
     }
-    
+
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<?> deleteRole(@PathVariable long id){
         Optional<Employee> employeeOptional = employeeService.getEmployee(id);
@@ -99,11 +105,11 @@ public class EmployeeController {
 
         String msg = String.format("Employee with id = %d is returned", employee);
 
-        if (employee.isPresent()) {        	
-        	return ResponseEntity.ok(msg);
+        if (employee.isPresent()) {
+            return ResponseEntity.ok(msg);
         }
         else {
-        	return ResponseEntity.noContent().build();
+            return ResponseEntity.noContent().build();
         }
     }
 

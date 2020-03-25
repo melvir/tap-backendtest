@@ -133,17 +133,32 @@ public class EmployeeRepositoryMock implements EmployeeRepository {
     @Override
     public Employee findByName(String name) {
 
-      List<Employee> emp = employeeList.stream().filter(employee -> employee.getName().equalsIgnoreCase(name)).collect(Collectors.toList());
-      return emp.get(0);
+        List<Employee> emp = employeeList.stream().filter(employee -> employee.getName().equalsIgnoreCase(name)).collect(Collectors.toList());
+        return emp.get(0);
+    }
+
+    @Override
+    public Page<Employee> findByName(String name, Pageable pageable) {
+        List<Employee> emp = employeePage.stream().filter(employee -> employee.getName().equalsIgnoreCase(String.valueOf(name))).collect(Collectors.toList());
+        return new PageImpl<>(emp);
     }
 
     @Override
     public Page<Employee> findByDepartment(String department, Pageable pageable) {
         List<Employee> emp = employeePage.stream().filter(employee -> employee.getDepartment().equalsIgnoreCase(String.valueOf(department))).collect(Collectors.toList());
-        Pageable paging = PageRequest.of(0, 10, Sort.by("id"));
-        Page<Employee> employeePage = new PageImpl<>(emp);
+        return new PageImpl<>(emp);
+    }
 
-        return employeePage;
+    @Override
+    public Page<Employee> findByNameAndDepartment(String name, String department, Pageable paging) {
+        List<Employee> emp = employeePage.stream()
+                .filter(
+                        employee ->
+                                employee.getDepartment().equalsIgnoreCase(String.valueOf(department))
+                                        && employee.getName().equalsIgnoreCase(String.valueOf(name))
+                )
+                .collect(Collectors.toList());
+        return new PageImpl<>(emp);
     }
 
 }

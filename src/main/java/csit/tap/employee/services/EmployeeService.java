@@ -89,15 +89,18 @@ public class EmployeeService {
         }
     }
 
-    public Employee findEmployeeByName(String name) {
-
-        return employeeRepository.findByName(name);
+    public Page<Employee> findByDepartment(Integer pageNo, Integer pageSize, String sortBy, String department) {
+        Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
+        return employeeRepository.findByDepartment(department, paging);
     }
 
-    public Page<Employee> findEmployeeByDepartment(Integer pageNo, Integer pageSize, String sortBy, String department) {
-
+    public Page<Employee> findByNameAndDepartment(Integer pageNo, Integer pageSize, String sortBy, String name, String department) {
         Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
+        return employeeRepository.findByNameAndDepartment(name, department, paging);
+    }
 
-        return employeeRepository.findByDepartment(department, paging);
+    public Page<Employee> findByName(Integer pageNo, Integer pageSize, String sortBy, String name) {
+        Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
+        return employeeRepository.findByName(name, paging);
     }
 }
