@@ -43,6 +43,7 @@ The example applicationn shows different test layers according to the [Test Pyra
 * Increase comfort when doing hand take over
 * Decrease the amount of time to create new feature on top of existing system 
 * Lesser help desk call
+* Software developers become happier
 
 
 ## What to test & why test / Minimal Code coverage
@@ -58,7 +59,7 @@ The example applicationn shows different test layers according to the [Test Pyra
   * Mock the repository (either by using Mockito or custom POJO)
   * Do unit testing with aim to isolate it for testing business logic
   
-* Repostories
+* Repositories
   * Only applicable for custom query methods (e.g. jpa /jpl)
   * Using DataJpaTest
   
@@ -72,7 +73,7 @@ The example applicationn shows different test layers according to the [Test Pyra
 ## Mocking
 * Create your own Java mock classes
    * Pros
-       * Easy readabiliy
+       * Easy readability
        * Just have to reuse your existing Java skills
        * Dont need to keep up to date with Mokito standard
    * Cons
