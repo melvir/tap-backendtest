@@ -36,7 +36,6 @@ The example applicationn shows different test layers according to the [Test Pyra
 
 ## Concepts
 * Isolation : test only 1 layer each time and mock everything else
-* 
 
 ## Benefits
 * Improve code quality
@@ -46,10 +45,10 @@ The example applicationn shows different test layers according to the [Test Pyra
 * Software developers become happier
 
 ## Testing Pattern
-* Adopt the Arrange, Act, Assert model
-* Arrange describes whatever setup is needed (eg. initializing a set of sample employees)
-* Act describes the subject's behavior that's under test (and typically only describes a single line needed to invoke that behavior) (eg. saving to store)
-* Assert describes the verification that the subject's behavior had the desired effect by evaluating its return value (eg. asserting response match to a sample employee prepared earlier)
+* Adopt the **Arrange**, **Act**, **Assert** model
+* **Arrange** describes whatever setup is needed (eg. initializing a set of sample employees)
+* **Act** describes the subject's behavior that's under test (and typically only describes a single line needed to invoke that behavior) (eg. saving to store)
+* **Assert** describes the verification that the subject's behavior had the desired effect by evaluating its return value (eg. asserting response match to a sample employee prepared earlier)
 
 ## What to test & why test / Minimal Code coverage
 * API
@@ -65,7 +64,7 @@ The example applicationn shows different test layers according to the [Test Pyra
   * Do unit testing with aim to isolate it for testing business logic
   
 * Repositories
-  * Only applicable for custom query methods (e.g. jpa /jpl)
+  * Only applicable for custom query methods (e.g. jpa / jpl)
   * Using DataJpaTest
   
 * Model
