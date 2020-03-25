@@ -68,78 +68,49 @@ The example applicationn shows different test layers according to the [Test Pyra
   * Using DataJpaTest
   
 * Model
-  * Do not test
+  * Only appliable for business logic methods created (e.g. isEmployeeAllowToApproveLeave)
 
 ## Do's and Don't's
 * Do not test the parameter
 * Test the input and output
 
-## Mocking
+## POJO Mocking
 * Create your own Java mock classes
    * Pros
        * Easy readability
        * Just have to reuse your existing Java skills
        * Dont need to keep up to date with Mokito standard
+       * Ease of maintainance of test because mock methods and result is centralized in mock objects  
    * Cons
        * More coding effort 
+```
+@RunWith(JUnit4.class)
+public class EmployeeServiceUnitTest {
 
-  Example:
-  ```
-  @RunWith(JUnit4.class)
-  public class EmployeeServiceUnitTest {
+    private EmployeeRepositoryMock employeeRepository = new EmployeeRepositoryMock();
+    private EmployeeService employeeService = new EmployeeService(employeeRepository);
 
-      private EmployeeRepositoryMock employeeRepository = new EmployeeRepositoryMock();
-      private EmployeeService employeeService = new EmployeeService(employeeRepository);
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
 
-      @Rule
-      public ExpectedException thrown = ExpectedException.none();
-
-      @Before
-      public void setup() {
-          Employee newEmployee = new Employee("Alex", "III");
-      }
+    @Before
+    public void setup() {
+        Employee newEmployee = new Employee("Alex", "ITA");
+    }
     
-      @Test
-      public void whenSaveEmployee_givenEmployee_shouldReturnEmployee(){
-          //arrange
-          Employee employeeToSave = new Employee("Mary", "TTT", LocalDateTime.now());
+    @Test
+    public void whenSaveEmployee_givenEmployee_shouldReturnEmployee(){
+        //arrange
+        Employee employeeToSave = new Employee("Mary", "CST", LocalDateTime.now());
 
-          //act
-          Employee newEmployee = employeeService.createEmployee(employeeToSave);
+        //act
+        Employee newEmployee = employeeService.createEmployee(employeeToSave);
 
-          //assert
-          assertThat(newEmployee).isNotNull().isEqualTo(employeeToSave);
-      }
-  }
-  ```
-  ```
-  public class EmployeeRepositoryMock implements EmployeeRepository {
-      private int saveCalledTimes;
-      private List<Employee> employeeList;
-      private Page<Employee> employeePage;
-
-      public boolean verify(String methodName, int wasCalled){
-          if(methodName.equalsIgnoreCase("save"))
-              return wasCalled == saveCalledTimes;
-          return false;
-      } 
-      .
-      .
-      .      
-      @Override
-      public Page<Employee> findAll(Pageable pageable) {
-          return new PageImpl<Employee>(employeeList.subList(pageable.getPageNumber(), pageable.getPageSize()), pageable,         pageable.getPageSize());
-      }
-
-      @Override
-      public <S extends Employee> S save(S s) {
-          saveCalledTimes++;
-          return null;
-      } 
-  }
-
-  ```
-
+        //assert
+        assertThat(newEmployee).isNotNull().isEqualTo(employeeToSave);
+    }
+}
+```
 * Using Mockito
    * Pros
        * Fast development of test cases
@@ -149,38 +120,38 @@ The example applicationn shows different test layers according to the [Test Pyra
    * Cons 
        * Tightly coupled to Mockito testing framework
        * Higher learning curve on Mockito API usage
-       
-  Example:
-  ```
-  @RunWith(MockitoJUnitRunner.class)
-  public class EmployeeServiceUnitTestWithMockito {
+       * High Maintainability effort, Mock methods and result is decentralized to individual test case, should any of the methods structure or object result changes. Developers needs to refactor all individual test cases.  
+       * Higher discipline required, as mocking become easy, developers may potentially mock private methods which causes test to be tightly coupled to impementation details which makes refactoring a pain
+```
+@RunWith(MockitoJUnitRunner.class)
+public class EmployeeServiceUnitTestWithMockito {
 
-      @Mock
-      private EmployeeRepository employeeRepository;
+    @Mock
+    private EmployeeRepository employeeRepository;
 
-      @InjectMocks
-      private EmployeeService employeeService;
+    @InjectMocks
+    private EmployeeService employeeService;
 
-      @Before
-      public void setup() {
-          Employee newEmployee = new Employee("Alex", "III");
-      }
+    @Before
+    public void setup() {
+        Employee newEmployee = new Employee("Alex", "ITA");
+    }
 
-      @Test
-      public void whenSaveEmployee_givenEmployee_shouldReturnEmployee(){
-          //arrange
-          Employee employeeToSave = new Employee("Mary", "TTT");
+    @Test
+    public void whenSaveEmployee_givenEmployee_shouldReturnEmployee(){
+        //arrange
+        Employee employeeToSave = new Employee("Mary", "CST");
 
-          //act
-          Employee newEmployee = employeeService.createEmployee(employeeToSave);
-          when(employeeRepository.save(newEmployee)).thenReturn(newEmployee);
+        //act
+        Employee newEmployee = employeeService.createEmployee(employeeToSave);
+        when(employeeRepository.save(newEmployee)).thenReturn(newEmployee);
 
-          //assert
-          verify(employeeRepository, times(1)).save(any());
-          assertThat(newEmployee).isEqualToIgnoringGivenFields( employeeToSave,"id","createdDateTime", "modifiedDateTime");
-      }
-  }
-  ```
+        //assert
+        verify(employeeRepository, times(1)).save(any());
+        assertThat(newEmployee).isEqualToIgnoringGivenFields( employeeToSave,"id","createdDateTime", "modifiedDateTime");
+    }
+}
+```
 
 ## Techniques
 * Use rest-assured to test specific JSON response by specifying the path.
