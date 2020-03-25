@@ -89,6 +89,30 @@ The example applicationn shows different test layers according to the [Test Pyra
 
 ## Techniques
 * Use rest-assured to test specific JSON response by specifying the path.
+(1) Rest-assured can be used to deserialize a result directly to a POJO model:
+```
+        Employee e = given()
+                .contentType(ContentType.JSON)
+                .body(json)
+                .pathParam("id", updatedEmployee.getId())
+                .when()
+                .put(apiUrl)
+                .then()
+                .statusCode(HttpStatus.OK.value())
+                .extract()
+                .as(Employee.class);
+```
+(2) Rest-assured can also be used to search through a list of objects within a json list:
+```
+        JsonPath jsonPath = RestAssured.given()
+                .param("department", department)
+                .when()
+                .get(apiUrl)
+                .then()
+                .statusCode(200)
+                .extract().body().jsonPath();
+        List<Employee> employeeList = jsonPath.getList("content", Employee.class);
+```
 
 ## List of guides
 * Web Layer test : https://spring.io/guides/gs/testing-web/
