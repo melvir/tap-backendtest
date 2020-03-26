@@ -74,7 +74,7 @@ The example applicationn shows different test layers according to the [Test Pyra
 * Do not test the parameter
 * Test the input and output
 
-## POJO Mocking
+## Mocking of functions using established test patterns
 * Create your own Java mock classes
    * Pros
        * Easy readability
