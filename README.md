@@ -21,17 +21,11 @@ The example applicationn shows different test layers according to the [Test Pyra
 ## Application Architecture
 ```
  ╭┄┄┄┄┄┄┄╮      ┌──────────┐      ┌──────────┐
- ┆   ☁  ┆  ←→  │    ☕   │  ←→  │    💾    │
+ ┆   ☁   ┆  ←→  │    ☕   │  ←→  │    💾    │
  ┆  Web  ┆ HTTP │  Spring  │      │ Database │
  ╰┄┄┄┄┄┄┄╯      │  Service │      └──────────┘
                 └──────────┘
-                     ↑ JSON/HTTP
-                     ↓
-                ┌──────────┐
-                │    ☁    │
-                │ Weather  │
-                │   API    │
-                └──────────┘
+                    
 ```
 
 ## Concepts
@@ -79,10 +73,10 @@ The example applicationn shows different test layers according to the [Test Pyra
    * Pros
        * Easy readability
        * Just have to reuse your existing Java skills
-       * Dont need to keep up to date with Mokito standard
-       * Ease of maintainance of test because mock methods and result is centralized in mock objects  
+       * Dont need to keep up to date with Mockito standard
+       * Ease of maintainance of test because mock methods and result is centralized in mock objects
    * Cons
-       * More coding effort        
+       * More coding effort
 ```
 @RunWith(JUnit4.class)
 public class EmployeeServiceUnitTest {
