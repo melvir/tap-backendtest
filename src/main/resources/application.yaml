@@ -1,0 +1,11 @@
+# This yaml file configures the feign client to call the mock beerService in the spring contract
+# the mock beerService will run as "beerservice" in BeerFeignClient and on localhost:8081
+beerservice:
+  ribbon:
+    eureka:
+      enabled: false
+    listOfServers: localhost:8081
+
+stubrunner:
+  idsToServiceIds:
+    beer-api-producer-java: beerservice
