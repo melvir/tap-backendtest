@@ -5,7 +5,7 @@
 * Adopt testing to systems which are deemed enterprise grade, not POCs
 
 ## Test Layers
-The example applicationn shows different test layers according to the [Test Pyramid](https://martinfowler.com/bliki/TestPyramid.html).
+The example application shows different test layers according to the [Test Pyramid](https://martinfowler.com/bliki/TestPyramid.html).
 
 ```
       ╱╲
@@ -21,7 +21,7 @@ The example applicationn shows different test layers according to the [Test Pyra
 ## Application Architecture
 ```
  ╭┄┄┄┄┄┄┄╮      ┌──────────┐      ┌──────────┐
- ┆   ☁   ┆  ←→  │    ☕   │  ←→  │    💾    │
+ ┆   ☁  ┆  ←→  │     ☕   │  ←→  │    💾    │
  ┆  Web  ┆ HTTP │  Spring  │      │ Database │
  ╰┄┄┄┄┄┄┄╯      │  Service │      └──────────┘
                 └──────────┘
