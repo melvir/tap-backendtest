@@ -37,7 +37,6 @@ public class EmployeeServiceTest {
     }
 
 
-
     @Test
     public void whenSaveEmployee_givenEmployee_shouldReturnEmployee(){
         //arrange
@@ -64,6 +63,7 @@ public class EmployeeServiceTest {
         assertThat(newEmployee).isNotNull().isEqualToIgnoringGivenFields(employeeToSave, "createdDateTime", "modifiedDateTime");
     }
 
+    // todo: video demo but for whenCreateEmployee
     @Test
     public void whenUpdateEmployee_givenEmptyName_shouldThrowInvalidDataException() {
         //arrange
@@ -130,6 +130,7 @@ public class EmployeeServiceTest {
     }
 
 //Region: Find Methods
+    // todo: for video demo
     @Test
     public void whenGetEmployee_givenDepartment_shouldReturnEmployee() {
 

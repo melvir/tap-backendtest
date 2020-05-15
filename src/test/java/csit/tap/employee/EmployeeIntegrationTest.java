@@ -110,9 +110,9 @@ public class EmployeeIntegrationTest {
      * To test for updating a specific Object only (Employee.class)
      * @throws JsonProcessingException when cannot parse the json as a request parameter
      */
+    //todo: for view demo
     @Test
     public void whenUpdateEmployeeName_GivenId_ShouldReturnEmployee() throws JsonProcessingException {
-
         //arrange
         String name = "John";
         String newName = "Mary";
@@ -144,9 +144,9 @@ public class EmployeeIntegrationTest {
     /**
      * To test for data in the pagination response for a list of employees
      */
+    //todo: for view demo
     @Test
     public void whenGetEmployeeByDepartment_GivenDepartment_ShouldReturnEmployee() {
-
         //arrange
         String department = "ITA";
         Employee employee = new Employee("John", department);
